@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { m, AnimatePresence, useReducedMotion } from "motion/react";
 import { Menu, X, Languages } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { useLang } from "./providers";
@@ -29,7 +29,7 @@ export function Header() {
   }, []);
 
   return (
-    <motion.header
+    <m.header
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.3 }}
@@ -93,7 +93,7 @@ export function Header() {
 
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             initial={prefersReducedMotion ? undefined : { opacity: 0, height: 0 }}
             animate={prefersReducedMotion ? undefined : { opacity: 1, height: "auto" }}
             exit={prefersReducedMotion ? undefined : { opacity: 0, height: 0 }}
@@ -111,9 +111,9 @@ export function Header() {
                 </a>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </m.header>
   );
 }
