@@ -1,0 +1,54 @@
+export type Lang = "en" | "es";
+
+const dictionaries: Record<Lang, Record<string, string>> = {
+  en: {
+    "nav.about": "About",
+    "nav.projects": "Projects",
+    "nav.experience": "Experience",
+    "nav.contact": "Contact",
+    "hero.scroll": "Scroll",
+    "hero.viewProjects": "View projects",
+    "section.selectedWork": "Selected Work",
+    "section.path": "Path",
+    "section.technologies": "Technologies",
+    "section.getInTouch": "Get in touch",
+    "section.contactText": "Have a project in mind, a question, or just want to say hi? I'm always up for a good conversation.",
+    "project.live": "Live",
+    "project.source": "Source",
+    "footer.designed": "Designed & built with intent",
+    "footer.top": "Top",
+    "theme.light": "Light mode",
+    "theme.dark": "Dark mode",
+    "lang.switch": "Español",
+    "404.title": "Page not found",
+    "404.description": "The page you're looking for doesn't exist.",
+    "404.back": "Back home",
+  },
+  es: {
+    "nav.about": "Sobre mí",
+    "nav.projects": "Proyectos",
+    "nav.experience": "Trayectoria",
+    "nav.contact": "Contacto",
+    "hero.scroll": "Desplázate",
+    "hero.viewProjects": "Ver proyectos",
+    "section.selectedWork": "Trabajos seleccionados",
+    "section.path": "Trayectoria",
+    "section.technologies": "Tecnologías",
+    "section.getInTouch": "Contáctame",
+    "section.contactText": "¿Tienes un proyecto en mente, una pregunta, o solo quieres saludar? Siempre estoy abierto a una buena conversación.",
+    "project.live": "Sitio",
+    "project.source": "Código",
+    "footer.designed": "Diseñado y construido con intención",
+    "footer.top": "Arriba",
+    "theme.light": "Modo claro",
+    "theme.dark": "Modo oscuro",
+    "lang.switch": "English",
+    "404.title": "Página no encontrada",
+    "404.description": "La página que buscas no existe.",
+    "404.back": "Volver al inicio",
+  },
+};
+
+export function getDictionary(lang: Lang): Record<string, string> {
+  return dictionaries[lang];
+}

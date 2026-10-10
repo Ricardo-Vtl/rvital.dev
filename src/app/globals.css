@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: var(--font-sora);
+  --font-body: var(--font-dm-sans);
+
+  --color-bg: #000000;
+  --color-surface: #0a0a0a;
+  --color-surface-hover: #141414;
+  --color-elevated: #1a1a1a;
+
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #777777;
+  --color-text-tertiary: #444444;
+
+  --color-border: #1a1a1a;
+  --color-border-light: #2a2a2a;
+
+  --color-accent: #c49a4a;
+  --color-accent-hover: #d4ae5e;
+  --color-accent-subtle: rgba(196, 154, 74, 0.08);
+  --color-accent-glow: rgba(196, 154, 74, 0.25);
+  --color-accent-muted: rgba(196, 154, 74, 0.6);
+
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.light {
+  --color-bg: #f0efec;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f5f4f1;
+  --color-elevated: #f0efec;
+
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #777777;
+  --color-text-tertiary: #aaaaaa;
+
+  --color-border: #e0e0dd;
+  --color-border-light: #d0d0cc;
+
+  --color-accent: #5a3818;
+  --color-accent-hover: #6a4828;
+  --color-accent-subtle: rgba(90, 56, 24, 0.08);
+  --color-accent-glow: rgba(90, 56, 24, 0.3);
+  --color-accent-muted: rgba(90, 56, 24, 0.6);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay {
+    display: none;
+  }
+}
