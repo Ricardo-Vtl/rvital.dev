@@ -8,6 +8,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
+import { LazyMotion, domAnimation } from "motion/react";
 import { type Lang, getDictionary } from "@/lib/i18n";
 
 type Theme = "light" | "dark";
@@ -68,11 +69,13 @@ export function Providers({ children }: { children: ReactNode }) {
   }, [lang]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      <LangContext.Provider value={{ lang, toggleLang, t }}>
-        {children}
-      </LangContext.Provider>
-    </ThemeContext.Provider>
+    <LazyMotion features={domAnimation} strict>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <LangContext.Provider value={{ lang, toggleLang, t }}>
+          {children}
+        </LangContext.Provider>
+      </ThemeContext.Provider>
+    </LazyMotion>
   );
 }
 

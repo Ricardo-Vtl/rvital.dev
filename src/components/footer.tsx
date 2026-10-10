@@ -1,7 +1,7 @@
 "use client";
 
 import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "motion/react";
 import { useLang } from "./providers";
 import { personalInfo, tData } from "@/data/portfolio";
 
@@ -54,14 +54,14 @@ export function Footer() {
             >
               &copy; {year} {personalInfo.name}
             </a>
-            <motion.a
+            <m.a
               href="#"
               className="inline-flex items-center gap-1 font-body text-xs text-text-tertiary transition-colors hover:text-accent"
               whileHover={{ x: -2 }}
             >
               {t("footer.top")}
               <ArrowUp className="h-3 w-3" />
-            </motion.a>
+            </m.a>
           </div>
         </div>
 

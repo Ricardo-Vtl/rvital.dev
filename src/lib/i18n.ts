@@ -3,11 +3,13 @@ export type Lang = "en" | "es";
 const dictionaries: Record<Lang, Record<string, string>> = {
   en: {
     "nav.about": "About",
+    "nav.workflow": "Method",
     "nav.projects": "Projects",
     "nav.experience": "Experience",
     "nav.contact": "Contact",
     "hero.scroll": "Scroll",
     "hero.viewProjects": "View projects",
+    "hero.available": "Available for work — Irapuato / Remote",
     "section.selectedWork": "Selected Work",
     "section.path": "Path",
     "section.technologies": "Technologies",
@@ -27,11 +29,13 @@ const dictionaries: Record<Lang, Record<string, string>> = {
   },
   es: {
     "nav.about": "Sobre mí",
+    "nav.workflow": "Método",
     "nav.projects": "Proyectos",
     "nav.experience": "Trayectoria",
     "nav.contact": "Contacto",
     "hero.scroll": "Desplázate",
     "hero.viewProjects": "Ver proyectos",
+    "hero.available": "Disponible — Irapuato / Remoto",
     "section.selectedWork": "Trabajos seleccionados",
     "section.path": "Trayectoria",
     "section.technologies": "Tecnologías",
