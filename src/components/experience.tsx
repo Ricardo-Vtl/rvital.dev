@@ -29,7 +29,7 @@ export function Experience() {
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <span className="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary">
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary">
                 {t("section.path")}
               </span>
               <div className="mt-4 h-px w-8 bg-border" />

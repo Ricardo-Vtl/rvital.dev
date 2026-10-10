@@ -1,56 +1,68 @@
 import type { Metadata } from "next";
-import { Sora, DM_Sans } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/header";
-import { Particles } from "@/components/particles";
-import { GrainOverlay } from "@/components/grain-overlay";
-import { Cursor } from "@/components/cursor";
+import { siteUrl } from "@/data/site";
 import "./globals.css";
 
-const sora = Sora({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  variable: "--font-sora",
+  variable: "--font-display",
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const sans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Ricardo Vital — Full-Stack Developer",
     template: "%s — Ricardo Vital",
   },
   description:
-    "Full-stack developer focused on clean architecture, thoughtful UX, and products that ship. Portfolio of Ricardo Vital.",
+    "Desarrollador full-stack de Irapuato, México. Aplicaciones web completas — APIs, bases de datos, seguridad, testing y despliegue. Portafolio de Ricardo Vital.",
   keywords: [
     "full-stack developer",
+    "desarrollador web",
     "react",
     "next.js",
     "typescript",
+    "node.js",
+    "postgresql",
     "ricardo vital",
+    "irapuato",
     "web developer",
-    "frontend",
-    "backend",
     "portfolio",
   ],
   authors: [{ name: "Ricardo Vital" }],
   creator: "Ricardo Vital",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "es_MX",
     siteName: "Ricardo Vital",
     title: "Ricardo Vital — Full-Stack Developer",
-    description: "Full-stack developer focused on clean architecture, thoughtful UX, and products that ship.",
-    url: "https://ricardovital.dev",
+    description:
+      "Aplicaciones web completas: arquitectura, APIs, base de datos, seguridad, testing y despliegue. Portafolio de Ricardo Vital, Irapuato, México.",
+    url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",
     title: "Ricardo Vital — Full-Stack Developer",
-    description: "Full-stack developer focused on clean architecture, thoughtful UX, and products that ship.",
+    description:
+      "Aplicaciones web completas: arquitectura, APIs, base de datos, seguridad, testing y despliegue.",
   },
   robots: {
     index: true,
@@ -66,7 +78,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sora.variable} ${dmSans.variable}`}
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -78,10 +90,10 @@ export default function RootLayout({
               "@type": "Person",
               name: "Ricardo Vital",
               jobTitle: "Full-Stack Developer",
-              url: "https://ricardovital.dev",
+              url: siteUrl,
               sameAs: [
-                "https://github.com/ricardovital",
-                "https://linkedin.com/in/ricardovital",
+                "https://github.com/Ricardo-Vtl",
+                "https://www.linkedin.com/in/ricardo-vital-dev",
               ],
             }),
           }}
@@ -90,16 +102,13 @@ export default function RootLayout({
       <body className="min-h-screen bg-bg font-body text-text-primary antialiased">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70] focus:rounded-full focus:border focus:border-border-light focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-accent"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70] focus:rounded-full focus:border focus:border-border-light focus:bg-surface focus:px-4 focus:py-4 focus:text-sm focus:font-medium focus:text-accent"
         >
           Skip to content
         </a>
         <Providers>
-          <Particles />
           <Header />
           <main id="main-content">{children}</main>
-          <Cursor />
-          <GrainOverlay />
         </Providers>
       </body>
     </html>

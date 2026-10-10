@@ -82,7 +82,7 @@ export function Projects() {
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: prefersReducedMotion ? 0 : 0.6, delay: prefersReducedMotion ? 0 : 0.2 }}
             >
-              <span className="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary">
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary">
                 {t("section.selectedWork")}
               </span>
               <div className="mt-4 h-px w-8 bg-border" />
@@ -134,24 +134,33 @@ export function Projects() {
                       </div>
 
                       <div className="mt-5 flex items-center gap-4 border-t border-border pt-4">
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-text-primary transition-all hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                        >
-                          <ExternalLink className="h-3.5 w-3.5" />
-                          {t("project.live")}
-                        </a>
-                        <a
-                          href={project.repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-text-tertiary transition-all hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                        >
-                          <GitBranch className="h-3.5 w-3.5" />
-                          {t("project.source")}
-                        </a>
+                        {project.liveUrl ? (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-text-primary transition-all hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" />
+                            {t("project.live")}
+                          </a>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.15em] text-text-tertiary">
+                            <ExternalLink className="h-3.5 w-3.5" />
+                            {t("project.soon")}
+                          </span>
+                        )}
+                        {project.repoUrl ? (
+                          <a
+                            href={project.repoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-text-tertiary transition-all hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                          >
+                            <GitBranch className="h-3.5 w-3.5" />
+                            {t("project.source")}
+                          </a>
+                        ) : null}
                       </div>
                     </div>
                   </motion.article>

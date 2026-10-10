@@ -31,7 +31,7 @@ export function About() {
               className="flex flex-col items-center gap-4"
             >
               <div className="h-16 w-px bg-border" />
-              <span className="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary vertical-rl [writing-mode:vertical-lr]">
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary vertical-rl [writing-mode:vertical-lr]">
                 {t("nav.about")}
               </span>
               <div className="h-8 w-px bg-border" />
@@ -63,7 +63,7 @@ export function About() {
                 transition={{ duration: prefersReducedMotion ? 0 : 0.5, delay: prefersReducedMotion ? 0 : 0.6 }}
                 className="mt-14"
               >
-                <span className="font-body text-[10px] font-medium uppercase tracking-[0.25em] text-text-tertiary">
+                <span className="font-mono text-[10px] font-medium uppercase tracking-[0.25em] text-text-tertiary">
                   {t("section.technologies")}
                 </span>
 

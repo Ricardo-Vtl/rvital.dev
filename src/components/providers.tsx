@@ -55,6 +55,10 @@ export function Providers({ children }: { children: ReactNode }) {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  useEffect(() => {
+    document.documentElement.lang = lang === "es" ? "es-MX" : "en";
+  }, [lang]);
+
   const toggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   const toggleLang = () => setLang((prev) => (prev === "en" ? "es" : "en"));
   const t = useCallback((key: string) => getDictionary(lang)[key] || key, [lang]);

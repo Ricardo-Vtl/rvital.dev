@@ -28,7 +28,7 @@ export function Contact() {
           transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: [0.25, 0.1, 0.25, 1] }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary">
+          <span className="font-mono text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary">
             {t("section.getInTouch")}
           </span>
 
