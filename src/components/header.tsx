@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Menu, X, Languages } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { useLang } from "./providers";
@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { key: "nav.about", href: "#about" },
+  { key: "nav.workflow", href: "#workflow" },
   { key: "nav.projects", href: "#projects" },
   { key: "nav.experience", href: "#experience" },
   { key: "nav.contact", href: "#contact" },

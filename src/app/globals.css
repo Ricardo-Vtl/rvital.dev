@@ -80,3 +80,61 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ─── Marquee de skills (patrón 21st.dev/Magic UI, implementado sobre tokens propios) ─── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 45s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ─── Border beam sutil para tarjetas (patrón 21st.dev) ─── */
+.beam-border {
+  position: relative;
+}
+.beam-border::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  background: linear-gradient(110deg, transparent 35%, var(--color-accent-glow) 50%, transparent 65%);
+  background-size: 200% 100%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.beam-border:hover::after {
+  opacity: 1;
+  animation: beam 2.6s linear infinite;
+}
+@keyframes beam {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .beam-border:hover::after {
+    animation: none;
+  }
+}

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s — Ricardo Vital",
   },
   description:
-    "Desarrollador full-stack de Irapuato, México. Aplicaciones web completas — APIs, bases de datos, seguridad, testing y despliegue. Portafolio de Ricardo Vital.",
+    "Full-stack developer from Irapuato, Mexico. Complete web applications: APIs, databases, security, testing and deployment. Portfolio of Ricardo Vital.",
   keywords: [
     "full-stack developer",
     "desarrollador web",
