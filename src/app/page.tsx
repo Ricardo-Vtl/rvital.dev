@@ -1,5 +1,6 @@
 import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
+import { KineticBand } from "@/components/kinetic-band";
 import { Workflow } from "@/components/workflow";
 import { Projects } from "@/components/projects";
 import { Experience } from "@/components/experience";
@@ -11,6 +12,7 @@ export default function Home() {
     <>
       <Hero />
       <About />
+      <KineticBand />
       <Workflow />
       <Projects />
       <Experience />

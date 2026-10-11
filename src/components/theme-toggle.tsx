@@ -1,13 +1,14 @@
 "use client";
 
 import { useTheme, useLang } from "./providers";
+import { useReducedMotionSafe } from "@/lib/motion";
 import { Moon, Sun } from "lucide-react";
-import { m, useReducedMotion } from "motion/react";
+import { m } from "motion/react";
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
   const { t } = useLang();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotionSafe();
 
   return (
     <button

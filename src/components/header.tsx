@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { m, AnimatePresence, useReducedMotion } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 import { Menu, X, Languages } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import { useReducedMotionSafe } from "@/lib/motion";
 import { useLang } from "./providers";
 import { personalInfo } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
@@ -19,7 +20,7 @@ const navLinks = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotionSafe();
   const { t, toggleLang, lang } = useLang();
 
   useEffect(() => {

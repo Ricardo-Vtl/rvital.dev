@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/header";
+import { Preloader } from "@/components/layout/preloader";
+import { FilmGrain } from "@/components/layout/grain";
+import { ScrollProgress } from "@/components/layout/scroll-progress";
+import { CustomCursor } from "@/components/layout/custom-cursor";
 import { siteUrl } from "@/data/site";
 import "./globals.css";
 
@@ -107,6 +111,10 @@ export default function RootLayout({
           Skip to content
         </a>
         <Providers>
+          <Preloader />
+          <FilmGrain />
+          <ScrollProgress />
+          <CustomCursor />
           <Header />
           <main id="main-content">{children}</main>
         </Providers>

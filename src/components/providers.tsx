@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from "react";
 import { LazyMotion, domAnimation } from "motion/react";
+import { SmoothScrollProvider } from "./providers/smooth-scroll";
+import { PageIntroProvider } from "./providers/page-intro";
 import { type Lang, getDictionary } from "@/lib/i18n";
 
 type Theme = "light" | "dark";
@@ -60,7 +62,7 @@ export function Providers({ children }: { children: ReactNode }) {
     document.documentElement.lang = lang === "es" ? "es-MX" : "en";
   }, [lang]);
 
-  const toggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  const toggleTheme = () => setTheme((prev) => (prev === "light" ? "dark" : "light"));
   const toggleLang = () => setLang((prev) => (prev === "en" ? "es" : "en"));
   const t = useCallback((key: string) => getDictionary(lang)[key] || key, [lang]);
 
@@ -69,13 +71,17 @@ export function Providers({ children }: { children: ReactNode }) {
   }, [lang]);
 
   return (
-    <LazyMotion features={domAnimation} strict>
-      <ThemeContext.Provider value={{ theme, toggleTheme }}>
-        <LangContext.Provider value={{ lang, toggleLang, t }}>
-          {children}
-        </LangContext.Provider>
-      </ThemeContext.Provider>
-    </LazyMotion>
+    <SmoothScrollProvider>
+      <PageIntroProvider>
+        <LazyMotion features={domAnimation} strict>
+          <ThemeContext.Provider value={{ theme, toggleTheme }}>
+            <LangContext.Provider value={{ lang, toggleLang, t }}>
+              {children}
+            </LangContext.Provider>
+          </ThemeContext.Provider>
+        </LazyMotion>
+      </PageIntroProvider>
+    </SmoothScrollProvider>
   );
 }
 

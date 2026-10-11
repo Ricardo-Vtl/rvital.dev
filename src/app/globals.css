@@ -81,24 +81,6 @@ body {
   }
 }
 
-/* ─── Marquee de skills (patrón 21st.dev/Magic UI, implementado sobre tokens propios) ─── */
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 45s linear infinite;
-}
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
 /* ─── Border beam sutil para tarjetas (patrón 21st.dev) ─── */
 .beam-border {
   position: relative;
@@ -137,4 +119,147 @@ body {
   .beam-border:hover::after {
     animation: none;
   }
+}
+
+/* ─── Depth Engine: layout de la escena ───
+   La altura y el sticky van por CSS (no por estado de React) para que el
+   layout sea idéntico en SSR, en la hidratación y con reduced-motion:
+   cero CLS. El motor solo decide si aplica transforms. */
+.depth-scene {
+  height: calc(var(--depth-length, 1) * 100svh);
+}
+.depth-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+}
+@media (prefers-reduced-motion: reduce) {
+  .depth-scene {
+    height: 100svh;
+  }
+  .depth-stage {
+    position: relative;
+    overflow: visible;
+  }
+}
+
+/* ─── Lenis smooth scroll (CSS requerido por la librería) ─── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ─── Film grain: textura sutil sobre toda la página ─── */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+.light .film-grain {
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+}
+
+/* ─── Aurora: atmósfera de profundidad para el hero ─── */
+.aurora {
+  position: absolute;
+  inset: -25% -10%;
+  pointer-events: none;
+  background:
+    radial-gradient(38rem 38rem at 20% 25%, var(--color-accent-subtle), transparent 62%),
+    radial-gradient(32rem 32rem at 80% 75%, rgba(91, 127, 122, 0.12), transparent 64%),
+    radial-gradient(26rem 26rem at 60% 15%, rgba(255, 255, 255, 0.03), transparent 60%);
+  filter: blur(28px);
+  animation: aurora-drift 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes aurora-drift {
+  from {
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(2%, 1.5%, 0) scale(1.07);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurora {
+    animation: none;
+  }
+}
+
+/* ─── Utilidades cinemáticas ─── */
+.split-line {
+  display: block;
+  overflow: hidden;
+  clip-path: inset(-0.15em -0.1em);
+}
+.split-char {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Indicador de scroll (hero) */
+@keyframes scroll-hint {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(7px);
+    opacity: 1;
+  }
+}
+.scroll-hint {
+  animation: scroll-hint 2.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint {
+    animation: none;
+  }
+}
+
+/* Pulso de disponibilidad */
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--color-accent-glow);
+  }
+  70% {
+    box-shadow: 0 0 0 7px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.pulse-dot {
+  animation: pulse-ring 2.4s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot {
+    animation: none;
+  }
+}
+
+/* Cursor custom: solo se activa vía JS cuando está disponible */
+.cursor-none,
+.cursor-none * {
+  cursor: none !important;
 }

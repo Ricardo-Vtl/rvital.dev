@@ -1,22 +1,37 @@
 "use client";
 
+import { useRef } from "react";
+import { m, useScroll, useSpring } from "motion/react";
 import { useLang } from "./providers";
 import { experience, tData } from "@/data/portfolio";
 import { Reveal } from "./motion";
+import { SplitReveal } from "./motion/split-text";
+import { Parallax } from "./motion/parallax";
+import { useReducedMotionSafe } from "@/lib/motion";
 
 export function Experience() {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotionSafe();
   const { t, lang } = useLang();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 80%", "end 60%"],
+  });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 110, damping: 28, mass: 0.4 });
 
   return (
     <section id="experience" className="relative overflow-hidden px-6 py-28 md:py-40">
-      {/* Watermark editorial */}
-      <div className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 select-none leading-none opacity-[0.08]">
-        <span className="font-heading text-[22vw] font-bold leading-none tracking-tighter text-text-primary md:text-[20vw]">
-          PATH
-        </span>
-      </div>
+      {/* Watermark con parallax */}
+      <Parallax speed={0.13} className="pointer-events-none absolute inset-0 select-none">
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 leading-none opacity-[0.07]">
+          <span className="block font-heading text-[22vw] font-bold leading-none tracking-tighter text-text-primary md:text-[20vw]">
+            PATH
+          </span>
+        </div>
+      </Parallax>
 
-      <div className="relative z-10 mx-auto max-w-6xl">
+      <div ref={ref} className="relative z-10 mx-auto max-w-6xl">
         <div className="grid gap-12 md:grid-cols-12">
           {/* Label */}
           <div className="md:col-span-2">
@@ -28,7 +43,14 @@ export function Experience() {
 
           {/* Timeline */}
           <div className="relative md:col-span-9 md:col-start-3">
+            {/* Línea con progreso scrub */}
             <div className="absolute top-1 bottom-1 left-0 w-px bg-border" />
+            {!reduced && (
+              <m.div
+                style={{ scaleY, originY: 0 }}
+                className="absolute top-1 bottom-1 left-0 w-px bg-accent"
+              />
+            )}
 
             <div className="space-y-14 md:space-y-20">
               {experience.map((exp, i) => (
@@ -45,9 +67,18 @@ export function Experience() {
                       {exp.period}
                     </div>
 
-                    <h3 className="font-heading text-xl font-semibold text-text-primary md:text-2xl">
-                      {tData(exp.role, lang)}
-                    </h3>
+                    {i === 0 ? (
+                      <SplitReveal
+                        as="h3"
+                        text={tData(exp.role, lang)}
+                        className="font-heading text-xl font-semibold text-text-primary md:text-2xl"
+                        stagger={0.015}
+                      />
+                    ) : (
+                      <h3 className="font-heading text-xl font-semibold text-text-primary md:text-2xl">
+                        {tData(exp.role, lang)}
+                      </h3>
+                    )}
                     <p className="mt-0.5 font-body text-sm font-medium text-text-tertiary">
                       {tData(exp.company, lang)}
                     </p>

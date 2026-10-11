@@ -1,15 +1,18 @@
 "use client";
 
 import { useRef } from "react";
-import { m, useScroll, useSpring, useReducedMotion } from "motion/react";
+import { m, useScroll, useSpring } from "motion/react";
 import { useLang } from "./providers";
 import { workflow } from "@/data/workflow";
 import { tData } from "@/data/portfolio";
 import { Reveal, RevealWords } from "./motion";
+import { SplitReveal } from "./motion/split-text";
+import { Parallax } from "./motion/parallax";
+import { useReducedMotionSafe } from "@/lib/motion";
 
 export function Workflow() {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const { t, lang } = useLang();
 
   const { scrollYProgress } = useScroll({
@@ -32,11 +35,12 @@ export function Workflow() {
 
           {/* Content */}
           <div className="md:col-span-9 md:col-start-3">
-            <Reveal>
-              <h2 className="font-heading text-4xl font-bold tracking-tight text-text-primary md:text-6xl">
-                <RevealWords text={tData(workflow.title, lang)} />
-              </h2>
-            </Reveal>
+            <SplitReveal
+              as="h2"
+              text={tData(workflow.title, lang)}
+              className="font-heading text-4xl font-bold tracking-tight text-text-primary md:text-6xl"
+              stagger={0.02}
+            />
 
             <Reveal delay={0.1}>
               <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-text-secondary">
@@ -64,6 +68,13 @@ export function Workflow() {
                         </div>
                       </div>
 
+                      {/* Número del paso: capa parallax sutil */}
+                      <Parallax speed={0.06} className="pointer-events-none absolute -top-6 -left-2 -z-10">
+                        <span className="font-heading text-7xl font-bold tracking-tighter text-text-primary/[0.04] md:text-8xl">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                      </Parallax>
+
                       <span className="inline-block border border-border bg-surface px-2.5 py-1 font-mono text-[11px] text-accent">
                         $ {step.cmd}
                       </span>
@@ -73,7 +84,7 @@ export function Workflow() {
                       </h3>
 
                       <p className="mt-3 max-w-xl font-body text-sm leading-relaxed text-text-secondary md:text-base">
-                        {tData(step.body, lang)}
+                        <RevealWords text={tData(step.body, lang)} blur={false} />
                       </p>
                     </div>
                   </Reveal>

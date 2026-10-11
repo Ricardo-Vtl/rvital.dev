@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { m, useInView, useReducedMotion } from "motion/react";
+import { m, useInView } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/motion";
 
 const EASE = [0.25, 0.1, 0.25, 1] as const;
 
@@ -24,7 +25,7 @@ export function Reveal({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-12% 0px" });
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
 
   if (reduced) return <div className={className}>{children}</div>;
 
@@ -58,7 +59,7 @@ export function RevealWords({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const words = text.split(" ");
 
   if (reduced) return <span className={className}>{text}</span>;
