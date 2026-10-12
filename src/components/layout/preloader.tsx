@@ -6,20 +6,23 @@ import { fontsReady, prefersReducedMotion } from "@/lib/motion";
 import { usePageIntro } from "@/components/providers/page-intro";
 
 /**
- * Preloader de entrada: espera a las fuentes (máx. 1.2s), cuenta 000→100
- * y se retira con un wipe hacia arriba. Al terminar libera `ready` para que
- * el hero arranque su coreografía en el mismo instante.
+ * Preloader de entrada: telón que espera a las fuentes (máx. 1.2s), cuenta
+ * 000→100 y se retira con un wipe hacia arriba.
  *
- * Con `prefers-reduced-motion` no se monta nunca: se marca `ready` de inmediato.
- * El estado `mounted` garantiza que el primer render (SSR + hidratación) sea
- * siempre `null`, evitando mismatch por detección de `window`.
+ * - Se renderiza en SSR (`skipped=false` inicial): el HTML del servidor ya
+ *   trae el telón y cubre desde el primer pintado → sin flash de contenido
+ *   desorganizado antes de hidratar. (Sin JS: `#preloader` se oculta por el
+ *   `<noscript>` del layout.)
+ * - `finish()` se dispara JUSTO antes del wipe, así la coreografía del hero
+ *   arranca con el telón aún cubriendo y se revela suave mientras sube, en
+ *   lugar de aparecer ya cargada y hacer fade-in después.
+ * - Con `prefers-reduced-motion` se retira antes de pintar y `ready` es inmediato.
  */
 export function Preloader() {
   const { finish } = usePageIntro();
   const rootRef = useRef<HTMLDivElement>(null);
   const countRef = useRef<HTMLSpanElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
   const [skipped, setSkipped] = useState(false);
 
   useLayoutEffect(() => {
@@ -28,11 +31,6 @@ export function Preloader() {
       finish();
       return;
     }
-    setMounted(true);
-  }, [finish]);
-
-  useLayoutEffect(() => {
-    if (!mounted) return;
 
     const root = rootRef.current;
     const count = countRef.current;
@@ -49,11 +47,7 @@ export function Preloader() {
     fontsReady().then(() => {
       if (cancelled) return;
 
-      const tl = gsap.timeline({
-        onComplete: () => {
-          finish();
-        },
-      });
+      const tl = gsap.timeline();
 
       tl.to(bar, { scaleX: 1, duration: 1, ease: "power2.inOut" }, 0)
         .to(
@@ -66,6 +60,9 @@ export function Preloader() {
           },
           0,
         )
+        // Liberar la intro del hero con el telón todavía cubriendo: sube el
+        // contenido animándose en sincronía con el wipe.
+        .add(() => finish())
         .to(root, { yPercent: -101, duration: 0.85, ease: "expo.inOut" }, "+=0.08")
         .set(root, { display: "none" });
     });
@@ -73,12 +70,13 @@ export function Preloader() {
     return () => {
       cancelled = true;
     };
-  }, [mounted, finish]);
+  }, [finish]);
 
-  if (skipped || !mounted) return null;
+  if (skipped) return null;
 
   return (
     <div
+      id="preloader"
       ref={rootRef}
       aria-hidden="true"
       className="fixed inset-0 z-[80] flex flex-col justify-end bg-bg px-6 pt-6 pb-8 md:px-10 md:pb-12"

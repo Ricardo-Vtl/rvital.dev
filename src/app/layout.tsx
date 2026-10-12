@@ -98,6 +98,19 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Tema antes del primer pintado: aplica la clase `.light` leyendo
+            localStorage (o prefers-color-scheme) para que no haya flash de
+            color al recargar. Réplica exacta de la lógica de Providers. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}if(t==='light'){document.documentElement.classList.add('light');}}catch(e){}",
+          }}
+        />
+        {/* Sin JS el telón no se retira: se oculta por CSS. */}
+        <noscript>
+          <style>{`#preloader{display:none!important}`}</style>
+        </noscript>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
