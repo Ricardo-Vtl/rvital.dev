@@ -30,5 +30,9 @@ next-env.d.ts
 __pycache__/
 *.pyc
 
-# Entorno
+# Entorno / agentes y planes (no van al repo público)
 /.agents
+/AGENTS.md
+/PLAN-REFRESH-2026-10.md
+/PLAN-UPGRADE-2026-10.md
+/skills-lock.json

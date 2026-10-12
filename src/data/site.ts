@@ -1,1 +1,1 @@
-export const siteUrl = "https://ricardo-vital.vercel.app";
+export const siteUrl = "https://rvital.dev";
