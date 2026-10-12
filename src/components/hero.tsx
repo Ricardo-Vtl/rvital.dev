@@ -184,7 +184,7 @@ export function Hero() {
         speed={0.6}
         baseOpacity={1}
         fadeOut={[0.32, 0.6]}
-        className="pointer-events-none absolute inset-x-0 bottom-[10svh] mx-auto block w-[min(88%,44svh)] md:right-[max(1.5rem,calc(50%-49rem+1.5rem))] md:bottom-auto md:left-auto md:top-[calc(50%-16rem)] md:mx-0 md:flex md:w-[min(40rem,38vw)] md:max-w-none md:items-end lg:w-[min(44rem,48vw)]"
+        className="pointer-events-none absolute inset-x-0 bottom-[10svh] mx-auto block w-[min(88%,35svh)] md:right-[max(1.5rem,calc(50%-49rem+1.5rem))] md:bottom-auto md:left-auto md:top-[calc(50%-16rem)] md:mx-0 md:flex md:w-[min(40rem,38vw)] md:max-w-none md:items-end lg:w-[min(44rem,48vw)]"
       >
         <div ref={mediaRef} className="relative w-full origin-top">
           <AsciiMonogram ref={monogramRef} label={t("hero.monogram")} scale={0.75} />

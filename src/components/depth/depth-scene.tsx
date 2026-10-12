@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { useReducedMotionSafe, useShortViewport } from "@/lib/motion";
+import { isFinePointer, useReducedMotionSafe, useShortViewport } from "@/lib/motion";
 import {
   depthOpacity,
   depthRotation,
@@ -199,7 +199,12 @@ export function DepthScene({
       frameRef.current?.({ progress, pointer: { x: smooth.x, y: smooth.y } });
     };
 
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    // Puntero: segunda fuente de profundidad, SOLO con mouse/trackpad. En
+    // táctil no se registra el listener → las capas del hero (y el monograma
+    // vía `uPointer`) no reaccionan al dedo. El parallax de scroll se conserva.
+    if (isFinePointer()) {
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+    }
     window.addEventListener("resize", onResize);
     gsap.ticker.add(tick);
 
