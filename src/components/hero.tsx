@@ -27,6 +27,11 @@ const AsciiMonogram = dynamic(
   { ssr: false },
 );
 
+// Retardo de la entrada del hero tras liberarse el telón. Súbelo para que la
+// animación empiece más tarde (cuando el telón ya está abriéndose) y bájalo
+// para que arranque antes. Ajusta solo este número.
+const INTRO_DELAY = 0.5;
+
 export function Hero() {
   const fieldRef = useRef<DepthFieldHandle>(null);
   const monogramRef = useRef<AsciiMonogramHandle>(null);
@@ -49,7 +54,7 @@ export function Hero() {
   useLayoutEffect(() => {
     if (!ready || prefersReducedMotion()) return;
 
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: INTRO_DELAY });
 
     tl.fromTo(badgeRef.current, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7 }, 0)
       .fromTo(introRef.current, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.9 }, 0.15)
@@ -117,14 +122,14 @@ export function Hero() {
                   text="Ricardo"
                   trigger="intro"
                   play={ready}
-                  delay={0.05}
+                  delay={INTRO_DELAY + 0.05}
                   className="block"
                 />
                 <SplitReveal
                   text="Vital"
                   trigger="intro"
                   play={ready}
-                  delay={0.18}
+                  delay={INTRO_DELAY + 0.18}
                   className="block text-accent"
                 />
               </h1>
