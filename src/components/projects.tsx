@@ -8,7 +8,7 @@ import { SplitReveal } from "./motion/split-text";
 import { Parallax } from "./motion/parallax";
 import { PointerDepth } from "./depth/pointer-depth";
 import { gsap } from "@/lib/gsap";
-import { isMobileViewport, prefersReducedMotion } from "@/lib/motion";
+import { isMobileViewport, useIsMobile, useReducedMotionSafe } from "@/lib/motion";
 
 function ProjectVisual({ color, index }: { color: string; index: number }) {
   return (
@@ -69,12 +69,15 @@ function ProjectVisual({ color, index }: { color: string; index: number }) {
 export function Projects() {
   const { t, lang } = useLang();
   const panelsRef = useRef<HTMLDivElement>(null);
-  const reduced = prefersReducedMotion();
+  const reduced = useReducedMotionSafe();
+  const isMobile = useIsMobile();
 
   // ─── Apilado cinemático: cada panel se hunde cuando el siguiente lo cubre ───
   useLayoutEffect(() => {
     const container = panelsRef.current;
-    if (!container || reduced || isMobileViewport()) return;
+    // `isMobileViewport()` (síncrono) evita un primer setup en móvil antes de
+    // que `isMobile` hidrate; `isMobile` reactivo reconfigura al cruzar 768px.
+    if (!container || reduced || isMobile || isMobileViewport()) return;
 
     const ctx = gsap.context(() => {
       const panels = gsap.utils.toArray<HTMLElement>("[data-panel]");
@@ -118,7 +121,7 @@ export function Projects() {
     }, container);
 
     return () => ctx.revert();
-  }, [reduced]);
+  }, [reduced, isMobile]);
 
   return (
     <section id="projects" className="relative overflow-hidden bg-bg">
@@ -161,7 +164,7 @@ export function Projects() {
             <div data-panel-inner className="mx-auto w-full max-w-6xl will-change-transform">
               <div
                 data-panel-content
-                className="grid items-center gap-12 md:grid-cols-12 md:gap-14"
+                className="grid grid-cols-1 items-center gap-12 md:grid-cols-12 md:gap-14"
               >
                 {/* Texto */}
                 <div className="md:col-span-7">

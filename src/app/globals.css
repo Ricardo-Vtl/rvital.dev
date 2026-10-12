@@ -144,6 +144,21 @@ body {
   }
 }
 
+/* Viewports bajos (landscape de móvil, ventanas cortas <500px de alto):
+   el hero no cabe en 100svh y el `overflow: clip` + los fades recortarían
+   los CTAs. Sin pin, flujo normal y altura suficiente para todo el
+   contenido (el motor de profundidad también se desactiva en JS). */
+@media (max-height: 500px) {
+  .depth-scene {
+    height: max(100svh, 42rem);
+  }
+  .depth-stage {
+    position: relative;
+    overflow: visible;
+    height: 100%;
+  }
+}
+
 /* ─── Lenis smooth scroll (CSS requerido por la librería) ─── */
 html.lenis,
 html.lenis body {

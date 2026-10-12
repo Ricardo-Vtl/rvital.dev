@@ -65,11 +65,14 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     (target: string | HTMLElement, offset = -72) => {
       if (lenis) {
         lenis.scrollTo(target, { offset, duration: 1.2 });
-      } else if (typeof target === "string") {
-        const el = document.querySelector(target);
-        el?.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Fallback nativo (p. ej. reduced-motion, sin Lenis): compensa el
+        // header fijo para que el título no quede oculto bajo la barra.
+        const el =
+          typeof target === "string" ? document.querySelector<HTMLElement>(target) : target;
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY + offset;
+        window.scrollTo({ top, behavior: "smooth" });
       }
     },
     [lenis],

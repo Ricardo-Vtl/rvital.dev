@@ -8,7 +8,7 @@ export default function NotFound() {
   const { t } = useLang();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
+    <div className="flex min-h-svh flex-col items-center justify-center px-6 text-center">
       <span className="font-heading text-8xl font-bold text-accent">404</span>
       <h1 className="mt-4 font-heading text-2xl font-semibold text-text-primary">
         {t("404.title")}

@@ -10,14 +10,14 @@ import {
   type ReactNode,
 } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { useReducedMotionSafe } from "@/lib/motion";
+import { useReducedMotionSafe, useShortViewport } from "@/lib/motion";
 import {
   depthOpacity,
   depthRotation,
   depthSpeed,
   depthPointerFactor,
   lerp,
-  pinnedProgress,
+  pinnedRaw,
   type DepthConfig,
 } from "@/lib/depth";
 
@@ -70,7 +70,11 @@ export function DepthScene({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const layersRef = useRef<Set<DepthLayerHandle>>(new Set());
   const reduced = useReducedMotionSafe();
-  const enabled = !reduced;
+  const short = useShortViewport();
+  // En viewports bajos el pin no cabe: se replica el fallback de
+  // reduced-motion (layout estático, sin transforms ni fades) para que el
+  // contenido —incluidos los CTAs— siempre sea alcanzable por scroll.
+  const enabled = !reduced && !short;
 
   // Refs estables: los callbacks no recrean el motor al re-renderizar.
   const frameRef = useRef(onFrame);
@@ -101,7 +105,11 @@ export function DepthScene({
 
     measure();
 
-    const apply = (progress: number, px: number, py: number) => {
+    // `progress` (0..1) gobierna los transforms y se congela al terminar el
+    // pin; `raw` no se clampa y sigue creciendo durante el despine (el tramo
+    // en que el stage sale del encuadre), de modo que los rangos de fade
+    // pueden expresar valores > 1 = "mientras el stage se despina".
+    const apply = (progress: number, raw: number, px: number, py: number) => {
       for (const layer of layersRef.current) {
         const { el, getConfig } = layer;
         const config = getConfig();
@@ -114,12 +122,12 @@ export function DepthScene({
         if (config.fadeOut) {
           const [from, to] = config.fadeOut;
           opacity *=
-            progress <= from ? 1 : progress >= to ? 0 : 1 - (progress - from) / (to - from);
+            raw <= from ? 1 : raw >= to ? 0 : 1 - (raw - from) / (to - from);
         }
         if (config.fadeIn) {
           const [from, to] = config.fadeIn;
           opacity *=
-            progress >= to ? 1 : progress <= from ? 0 : (progress - from) / (to - from);
+            raw >= to ? 1 : raw <= from ? 0 : (raw - from) / (to - from);
         }
 
         const yOffset = -progress * distance * speed + (config.offset ?? 0) * vh;
@@ -137,7 +145,7 @@ export function DepthScene({
     };
 
     // Estado correcto antes del primer frame visible (evita flash).
-    apply(0, 0, 0);
+    apply(0, 0, 0, 0);
 
     let active = false;
 
@@ -168,6 +176,14 @@ export function DepthScene({
     const onResize = () => {
       measure();
       ScrollTrigger.refresh();
+      // Un cambio de viewport puede dejar un transform obsoleto en las capas
+      // (p. ej. al alternar la emulación móvil de DevTools). Reseteamos el
+      // puntero suavizado y re-aplicamos al instante con las métricas y el
+      // scroll actuales, sin esperar al siguiente frame.
+      smooth.x = target.x;
+      smooth.y = target.y;
+      const raw = pinnedRaw(window.scrollY, start, distance);
+      apply(Math.min(1, Math.max(0, raw)), raw, smooth.x, smooth.y);
     };
 
     const tick = () => {
@@ -175,8 +191,11 @@ export function DepthScene({
       smooth.x = lerp(smooth.x, target.x, 0.055);
       smooth.y = lerp(smooth.y, target.y, 0.055);
 
-      const progress = pinnedProgress(window.scrollY, start, distance);
-      apply(progress, smooth.x, smooth.y);
+      // Raw: sin clamps, llega hasta (altura - vh) / distancia al final del
+      // despine (con length 2.4 ≈ 1.71). Los transforms usan el clamped.
+      const raw = pinnedRaw(window.scrollY, start, distance);
+      const progress = Math.min(1, Math.max(0, raw));
+      apply(progress, raw, smooth.x, smooth.y);
       frameRef.current?.({ progress, pointer: { x: smooth.x, y: smooth.y } });
     };
 
@@ -219,9 +238,9 @@ type DepthLayerProps = {
   offset?: number;
   /** Amplitud del parallax de puntero, en fracciones de viewport */
   pointer?: number;
-  /** Opacidad 1→0 entre estos dos puntos de progreso */
+  /** Opacidad 1→0 entre estos dos puntos de progreso raw (valores > 1 = durante el despine) */
   fadeOut?: [number, number];
-  /** Opacidad 0→1 entre estos dos puntos de progreso */
+  /** Opacidad 0→1 entre estos dos puntos de progreso raw */
   fadeIn?: [number, number];
   /** Override de opacidad base (por defecto la deriva depth) */
   baseOpacity?: number;

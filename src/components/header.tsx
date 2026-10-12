@@ -35,7 +35,7 @@ export function Header() {
       animate={{ opacity: 1 }}
       transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.3 }}
       className={cn(
-        "fixed top-0 right-0 left-0 z-40 transition-all duration-500",
+        "fixed top-0 right-0 left-0 z-40 transition-all duration-500 [padding-top:env(safe-area-inset-top)] [padding-left:env(safe-area-inset-left)] [padding-right:env(safe-area-inset-right)]",
         scrolled
           ? "border-b border-border bg-bg/80 backdrop-blur-xl"
           : "bg-transparent",
@@ -44,7 +44,7 @@ export function Header() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a
           href="#"
-          className="font-heading text-lg font-semibold tracking-tight text-text-tertiary transition-colors hover:text-accent"
+          className="px-1 font-heading text-lg font-semibold tracking-tight text-text-tertiary transition-colors hover:text-accent"
         >
           {personalInfo.initials}
         </a>
@@ -54,7 +54,7 @@ export function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="font-body text-xs font-medium uppercase tracking-[0.2em] text-text-tertiary transition-colors hover:text-accent"
+              className="py-2 font-body text-xs font-medium uppercase tracking-[0.2em] text-text-tertiary transition-colors hover:text-accent"
             >
               {t(link.key)}
             </a>
@@ -106,7 +106,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
-                  className="font-body text-sm text-text-secondary transition-colors hover:text-accent py-2"
+                  className="font-body text-sm text-text-secondary transition-colors hover:text-accent py-3"
                 >
                   {t(link.key)}
                 </a>

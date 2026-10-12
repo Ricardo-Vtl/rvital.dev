@@ -20,7 +20,7 @@ export function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative overflow-hidden px-6 py-28 md:py-44"
+      className="relative overflow-hidden px-6 pt-20 pb-24 md:pt-28 md:pb-44"
     >
       {/* Plano lejano (depth 0.12): watermark que apenas se mueve */}
       <Parallax speed={0.3} className="pointer-events-none absolute inset-0 select-none">
@@ -62,18 +62,18 @@ export function Contact() {
           {/* CTA magnético — plano cercano (depth 0.85) */}
           <div className="mt-14">
             <PointerDepth depth={0.85}>
-              <Magnetic strength={0.22} className="inline-block">
+              <Magnetic strength={0.22} className="inline-block max-w-full">
                 <a
                   href={`mailto:${personalInfo.email}`}
                   data-cursor="link"
-                  className="group inline-flex flex-col items-center gap-3 border border-border bg-surface px-8 py-8 transition-colors hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:px-12"
+                  className="group inline-flex max-w-full flex-col items-center gap-3 border border-border bg-surface px-6 py-8 transition-colors hover:border-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:px-8 md:px-12"
                 >
                   <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-text-tertiary">
                     {lang === "es" ? "Escríbeme" : "Email me"}
                   </span>
-                  <span className="flex items-center gap-2 font-heading text-lg font-bold tracking-tight text-text-primary transition-colors group-hover:text-accent md:text-2xl">
-                    {personalInfo.email}
-                    <ArrowUpRight className="h-5 w-5 text-accent transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                  <span className="flex min-w-0 max-w-full items-center gap-2 font-heading text-base font-bold tracking-tight text-text-primary transition-colors group-hover:text-accent sm:text-lg md:text-2xl">
+                    <span className="[overflow-wrap:anywhere]">{personalInfo.email}</span>
+                    <ArrowUpRight className="h-5 w-5 shrink-0 text-accent transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </span>
                 </a>
               </Magnetic>

@@ -3,62 +3,68 @@
 import dynamic from "next/dynamic";
 import { useCallback, useLayoutEffect, useRef } from "react";
 import { m } from "motion/react";
-import Image from "next/image";
 import { ArrowDown, Github, Linkedin } from "lucide-react";
 import { useLang } from "./providers";
 import { personalInfo, tData } from "@/data/portfolio";
 import { SplitReveal } from "./motion/split-text";
 import { DepthScene, DepthLayer, type DepthFrame } from "./depth/depth-scene";
 import type { DepthFieldHandle } from "./depth/depth-field";
+import type { AsciiMonogramHandle } from "./hero/ascii-monogram";
 import { gsap } from "@/lib/gsap";
-import { useReducedMotionSafe } from "@/lib/motion";
+import { prefersReducedMotion, useReducedMotionSafe } from "@/lib/motion";
 import { usePageIntro } from "./providers/page-intro";
 
-// El campo WebGL se carga solo en cliente y fuera del bundle inicial:
-// protege LCP y TTI (el canvas es decorativo, carga tras la hidratación).
+// Cargas diferidas: ni OGL ni el campo de partículas entran en el bundle
+// inicial (protegen LCP y TTI). El monograma ASCII es decorativo pero
+// estructural: si falla, el plano queda vacío y el sitio sigue intacto.
 const DepthField = dynamic(
   () => import("./depth/depth-field").then((mod) => mod.DepthField),
   { ssr: false },
 );
 
+const AsciiMonogram = dynamic(
+  () => import("./hero/ascii-monogram").then((mod) => mod.AsciiMonogram),
+  { ssr: false },
+);
+
 export function Hero() {
   const fieldRef = useRef<DepthFieldHandle>(null);
+  const monogramRef = useRef<AsciiMonogramHandle>(null);
   const badgeRef = useRef<HTMLSpanElement>(null);
   const introRef = useRef<HTMLDivElement>(null);
   const ctasRef = useRef<HTMLDivElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
-  const clipRef = useRef<HTMLDivElement>(null);
 
-  const reduced = useReducedMotionSafe();
-  const enabled = !reduced;
+  const reducedMotion = useReducedMotionSafe();
+  const enabled = !reducedMotion;
   const { t, lang } = useLang();
   const { ready } = usePageIntro();
 
   const onFrame = useCallback((frame: DepthFrame) => {
     fieldRef.current?.update(frame);
+    monogramRef.current?.update(frame);
   }, []);
 
   // ─── Intro: se dispara cuando el preloader libera `ready` ───
   useLayoutEffect(() => {
-    if (!ready || reduced) return;
+    if (!ready || prefersReducedMotion()) return;
 
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
     tl.fromTo(badgeRef.current, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7 }, 0)
       .fromTo(introRef.current, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.9 }, 0.15)
       .fromTo(
-        clipRef.current,
-        { clipPath: "inset(100% 0% 0% 0%)" },
-        { clipPath: "inset(0% 0% 0% 0%)", duration: 1.5, ease: "expo.out" },
+        mediaRef.current,
+        { opacity: 0, scale: 0.96 },
+        { opacity: 1, scale: 1, duration: 1.2, ease: "expo.out" },
         0.2,
       )
-      .fromTo(mediaRef.current, { scale: 1.06 }, { scale: 1, duration: 1.6, ease: "expo.out" }, 0.2)
       .fromTo(ctasRef.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 }, 0.5);
 
     return () => {
       tl.kill();
     };
-  }, [ready, reduced]);
+  }, [ready]);
 
   return (
     <DepthScene length={2.4} className="relative" onFrame={onFrame}>
@@ -95,9 +101,9 @@ export function Hero() {
         fadeOut={[0.22, 0.48]}
         className="absolute inset-0"
       >
-        <div className="mx-auto flex h-full w-full max-w-6xl items-center px-6 pt-24 pb-20">
+        <div className="mx-auto flex h-full w-full max-w-6xl items-start px-6 pt-24 pb-20 md:items-center">
           <div className="grid w-full grid-cols-1 items-center gap-16 md:grid-cols-12">
-            <div className="md:col-span-7">
+            <div className="md:col-span-7 lg:col-span-6">
               <span
                 ref={badgeRef}
                 className="inline-flex items-center gap-2.5 border border-border bg-surface/70 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-text-secondary backdrop-blur-sm"
@@ -125,7 +131,7 @@ export function Hero() {
 
               <div ref={introRef} className="mt-10 flex gap-5">
                 <div className="hidden w-px shrink-0 bg-accent/40 md:block" />
-                <p className="max-w-md font-body text-lg leading-relaxed text-text-secondary md:text-xl">
+                <p className="max-w-sm font-body text-lg leading-relaxed md:max-w-md text-text-secondary md:text-xl">
                   {tData(personalInfo.tagline, lang)}
                 </p>
               </div>
@@ -164,70 +170,42 @@ export function Hero() {
         </div>
       </DepthLayer>
 
-      {/* ─── Plano 0.72 · Foto: plano cercano, viaja casi con el scroll ───
-          Móvil: full-bleed atmosférico tras el texto (con scrim).
-          Desktop: columna enmarcada a la derecha. */}
+      {/* ─── Plano 0.72 · Monograma ASCII RV: firma del hero, se desarma al scrollear.
+            Móvil: centrado con auto-márgenes (`inset-x-0 mx-auto`) —el motor
+            de profundidad escribe `transform` inline y pisaría un
+            `-translate-x-1/2`—, tamaño acotado por la altura de viewport
+            (min(88%,26svh)). Ajusta `bottom-[10svh]` (posición) y `26svh`
+            (tamaño) para cuadrarlo a ojo.
+            Desktop: columna derecha; el ancho se acota por breakpoint
+            (38vw en md, 48vw en lg) para no invadir la columna de texto
+            entre 1024 y 1536px. ─── */}
       <DepthLayer
         depth={0.72}
         speed={0.6}
         baseOpacity={1}
-        fadeOut={[0.3, 0.58]}
-        className="absolute inset-0 md:inset-y-0 md:right-[max(1.5rem,calc(50%-44rem))] md:left-auto md:flex md:w-[min(30rem,38vw)] md:items-center"
+        fadeOut={[0.32, 0.6]}
+        className="pointer-events-none absolute inset-x-0 bottom-[10svh] mx-auto block w-[min(88%,44svh)] md:right-[max(1.5rem,calc(50%-49rem+1.5rem))] md:bottom-auto md:left-auto md:top-[calc(50%-16rem)] md:mx-0 md:flex md:w-[min(40rem,38vw)] md:max-w-none md:items-end lg:w-[min(44rem,48vw)]"
       >
-        <div className="absolute inset-0 md:hidden" aria-hidden="true">
-          <Image
-            src="/photo.png"
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-cover opacity-35"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/80 to-bg/50" />
-        </div>
+        <div ref={mediaRef} className="relative w-full origin-top">
+          <AsciiMonogram ref={monogramRef} label={t("hero.monogram")} scale={0.75} />
 
-        <div ref={mediaRef} className="relative hidden w-full origin-top md:block">
-          <div
-            ref={clipRef}
-            className="relative aspect-4/5 w-full overflow-hidden border border-border-light"
-          >
-            <Image
-              src="/photo.png"
-              alt="Ricardo Vital"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 384px"
-              priority
-            />
-
-            {/* Esquinas técnicas */}
-            {[
-              "-top-2 -left-2 border-t border-l",
-              "-top-2 -right-2 border-t border-r",
-              "-bottom-2 -left-2 border-b border-l",
-              "-bottom-2 -right-2 border-b border-r",
-            ].map((pos) => (
-              <span
-                key={pos}
-                aria-hidden="true"
-                className={`absolute h-5 w-5 border-accent/70 ${pos}`}
-              />
-            ))}
-          </div>
-
-          <p className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-text-tertiary">
+          <p className="mt-5 hidden text-center font-mono text-[10px] uppercase tracking-[0.3em] text-text-tertiary md:block">
             Irapuato, GTO · MX
           </p>
         </div>
       </DepthLayer>
 
-      {/* ─── Plano 0.65 · Statement intermedio: entra desde abajo y llena el pin ─── */}
+      {/* ─── Plano 0.65 · Statement: calibrado para length 2.4 (offset ≈
+            distancia × speed) — llega centrado al final del pin y se
+            disuelve durante el despine mientras el About sube: costura
+            progresiva sin vacío ─── */}
       <DepthLayer
         depth={0.65}
-        speed={0.55}
-        offset={0.55}
+        speed={0.85}
+        offset={1.2}
         baseOpacity={1}
-        fadeIn={[0.44, 0.62]}
-        fadeOut={[0.8, 0.96]}
+        fadeIn={[0.62, 0.76]}
+        fadeOut={[1.05, 1.5]}
         pointer={0.09}
         className="absolute inset-0 flex items-center justify-center px-6"
       >
@@ -293,11 +271,11 @@ export function Hero() {
         </span>
       </DepthLayer>
 
-      {/* ─── Indicador de scroll: se retira en cuanto te mueves ─── */}
-      <DepthLayer depth={0.85} speed={0.3} baseOpacity={1} fadeOut={[0, 0.06]} className="absolute inset-0">
+      {/* ─── Indicador de scroll: solo desktop (en móvil choca con la placa) ─── */}
+      <DepthLayer depth={0.85} speed={0.3} baseOpacity={1} fadeOut={[0, 0.06]} className="absolute inset-0 hidden md:block">
         <m.div
-          initial={reduced ? undefined : { opacity: 0 }}
-          animate={reduced ? undefined : { opacity: 1 }}
+          initial={reducedMotion ? undefined : { opacity: 0 }}
+          animate={reducedMotion ? undefined : { opacity: 1 }}
           transition={{ duration: 0.8, delay: 1.5 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2"
         >

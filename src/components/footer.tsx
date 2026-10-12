@@ -29,7 +29,7 @@ export function Footer() {
             <div className="text-center md:text-left">
               <a
                 href="#"
-                className="font-heading text-lg font-semibold tracking-tight text-text-tertiary transition-colors hover:text-accent"
+                className="px-1 py-1 font-heading text-lg font-semibold tracking-tight text-text-tertiary transition-colors hover:text-accent"
               >
                 {personalInfo.initials}
               </a>
@@ -66,7 +66,7 @@ export function Footer() {
               </span>
               <m.a
                 href="#"
-                className="inline-flex items-center gap-1 font-body text-xs text-text-tertiary transition-colors hover:text-accent"
+                className="inline-flex items-center gap-1 py-1.5 font-body text-xs text-text-tertiary transition-colors hover:text-accent"
                 whileHover={{ x: -2 }}
               >
                 {t("footer.top")}

@@ -32,7 +32,7 @@ export function Experience() {
       </Parallax>
 
       <div ref={ref} className="relative z-10 mx-auto max-w-6xl">
-        <div className="grid gap-12 md:grid-cols-12">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
           {/* Label */}
           <div className="md:col-span-2">
             <span className="font-mono text-[10px] font-medium uppercase tracking-[0.3em] text-text-tertiary">

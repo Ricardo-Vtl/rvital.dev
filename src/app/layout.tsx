@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/header";
@@ -72,6 +72,18 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // `cover` habilita env(safe-area-inset-*): el header respeta el notch/borde
+  // en landscape y en modo standalone sin recortar contenido.
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f3f0" },
+  ],
 };
 
 export default function RootLayout({

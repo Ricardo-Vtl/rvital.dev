@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef, type ReactNode } from "react";
 import { gsap } from "@/lib/gsap";
-import { isMobileViewport, prefersReducedMotion } from "@/lib/motion";
+import { isMobileViewport, prefersReducedMotion, useIsMobile } from "@/lib/motion";
 
 type ParallaxProps = {
   children: ReactNode;
@@ -25,12 +25,13 @@ type ParallaxProps = {
  */
 export function Parallax({ children, speed = 0.2, axis = "y", className }: ParallaxProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
 
-    const multiplier = isMobileViewport() ? 0.55 : 1;
+    const multiplier = isMobile || isMobileViewport() ? 0.55 : 1;
     const amount = speed * multiplier * 60;
     const from = axis === "y" ? { yPercent: amount } : { xPercent: amount };
     const to = axis === "y" ? { yPercent: -amount } : { xPercent: -amount };
@@ -57,7 +58,7 @@ export function Parallax({ children, speed = 0.2, axis = "y", className }: Paral
       el.style.willChange = "auto";
       ctx.revert();
     };
-  }, [speed, axis]);
+  }, [speed, axis, isMobile]);
 
   return (
     <div ref={ref} className={className}>

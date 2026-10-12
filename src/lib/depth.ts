@@ -19,7 +19,7 @@ export interface DepthConfig {
   speed?: number;
   /** Desplazamiento vertical inicial, en unidades de viewport */
   offset?: number;
-  /** Colapso final de opacidad: [% progreso donde empieza, % donde es 0] */
+  /** Colapso final de opacidad: [% progreso donde empieza, % donde es 0; >1 = despine] */
   fadeOut?: [number, number];
   /** Aparición: [% progreso donde empieza, % donde llega a opacidad plena] */
   fadeIn?: [number, number];
@@ -83,14 +83,14 @@ export function computeDepth(config: DepthConfig, progress: number): ComputedDep
   };
 }
 
-/** Progreso 0..1 de un contenedor sticky a partir del scroll real. */
-export function pinnedProgress(
-  scrollY: number,
-  start: number,
-  distance: number,
-): number {
+/**
+ * Progreso raw de un contenedor sticky a partir del scroll real, sin
+ * clamps: 0..1 durante el pin y > 1 durante el despine (el tramo en que
+ * el stage sale del encuadre). Con length L llega a L/(L-1) al final.
+ */
+export function pinnedRaw(scrollY: number, start: number, distance: number): number {
   if (distance <= 0) return 0;
-  return Math.min(1, Math.max(0, (scrollY - start) / distance));
+  return (scrollY - start) / distance;
 }
 
 /** Puntero normalizado -1..1, suavizado con lerp independiente del frame rate. */
