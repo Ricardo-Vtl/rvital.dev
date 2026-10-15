@@ -134,6 +134,18 @@ body {
   height: 100svh;
   overflow: clip;
 }
+/* Móvil: escena de una pantalla y stage NO sticky → el hero sale natural y no
+   deja fondo colgando (sin espacios en blanco). El efecto ocurre durante la
+   salida (modo `exit`). `position: relative` mantiene el contexto de las capas
+   absolutas. Desktop sigue con `--depth-length` (2.4, sticky). */
+@media (max-width: 767px) {
+  .depth-scene {
+    height: 100svh;
+  }
+  .depth-stage {
+    position: relative;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .depth-scene {
     height: 100svh;

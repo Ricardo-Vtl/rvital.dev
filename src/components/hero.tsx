@@ -11,8 +11,9 @@ import { DepthScene, DepthLayer, type DepthFrame } from "./depth/depth-scene";
 import type { DepthFieldHandle } from "./depth/depth-field";
 import type { AsciiMonogramHandle } from "./hero/ascii-monogram";
 import { gsap } from "@/lib/gsap";
-import { prefersReducedMotion, useReducedMotionSafe } from "@/lib/motion";
+import { prefersReducedMotion, useIsMobile, useReducedMotionSafe } from "@/lib/motion";
 import { usePageIntro } from "./providers/page-intro";
+import { StatementPhrase } from "./statement-phrase";
 
 // Cargas diferidas: ni OGL ni el campo de partículas entran en el bundle
 // inicial (protegen LCP y TTI). El monograma ASCII es decorativo pero
@@ -42,8 +43,17 @@ export function Hero() {
 
   const reducedMotion = useReducedMotionSafe();
   const enabled = !reducedMotion;
+  const isMobile = useIsMobile();
   const { t, lang } = useLang();
   const { ready } = usePageIntro();
+
+  // En móvil (modo `exit`) el contenido se "rezaga" (`lag`): permanece en
+  // cuadro mientras se desvanece y encoge, a la par que el ASCII se desarma,
+  // sin dejar fondo colgando. En desktop se apaga antes y no encoge ni se
+  // rezaga.
+  const contentFadeOut: [number, number] = isMobile ? [0.05, 0.7] : [0.22, 0.48];
+  const contentShrink = isMobile ? 0.8 : 1;
+  const contentLag = isMobile ? 0.35 : 0;
 
   const onFrame = useCallback((frame: DepthFrame) => {
     fieldRef.current?.update(frame);
@@ -103,7 +113,9 @@ export function Hero() {
         depth={0.5}
         speed={0.42}
         baseOpacity={1}
-        fadeOut={[0.22, 0.48]}
+        fadeOut={contentFadeOut}
+        shrink={contentShrink}
+        lag={contentLag}
         className="absolute inset-0"
       >
         <div className="mx-auto flex h-full w-full max-w-6xl items-start px-6 pt-24 pb-20 md:items-center">
@@ -200,10 +212,11 @@ export function Hero() {
         </div>
       </DepthLayer>
 
-      {/* ─── Plano 0.65 · Statement: calibrado para length 2.4 (offset ≈
-            distancia × speed) — llega centrado al final del pin y se
-            disuelve durante el despine mientras el About sube: costura
-            progresiva sin vacío ─── */}
+      {/* ─── Plano 0.65 · Statement (solo desktop): calibrado para length 2.4
+            (offset ≈ distancia × speed) — llega centrado al final del pin y se
+            disuelve durante el despine mientras el About sube. En móvil el
+            hero es una sola pantalla y la frase vive en su propia sección
+            (components/statement.tsx). ─── */}
       <DepthLayer
         depth={0.65}
         speed={0.85}
@@ -212,20 +225,10 @@ export function Hero() {
         fadeIn={[0.62, 0.76]}
         fadeOut={[1.05, 1.5]}
         pointer={0.09}
-        className="pointer-events-none absolute inset-0 flex items-center justify-center px-6"
+        className="pointer-events-none absolute inset-0 hidden items-center justify-center px-6 md:flex"
       >
         <p className="max-w-3xl text-center font-heading text-4xl leading-[1.05] font-bold tracking-tight text-text-primary md:text-6xl lg:text-7xl">
-          {lang === "es" ? (
-            <>
-              Construyo el siguiente nivel
-              <span className="text-accent"> con tecnología moderna</span>
-            </>
-          ) : (
-            <>
-              Building the next level
-              <span className="text-accent"> with modern technology</span>
-            </>
-          )}
+          <StatementPhrase lang={lang} />
         </p>
       </DepthLayer>
 

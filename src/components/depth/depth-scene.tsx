@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { isFinePointer, useReducedMotionSafe, useShortViewport } from "@/lib/motion";
+import { isFinePointer, isMobileViewport, useIsMobile, useReducedMotionSafe, useShortViewport } from "@/lib/motion";
 import {
   depthOpacity,
   depthRotation,
@@ -59,6 +59,9 @@ type DepthSceneProps = {
  *   **cero lecturas de layout por frame** (no hay thrashing).
  * - Solo corre mientras la escena está en viewport (ScrollTrigger onToggle):
  *   fuera de pantalla no se ejecuta nada.
+ * - Móvil (`exit`): el stage NO es sticky y la escena mide una pantalla, así
+ *   que no deja fondo colgando (sin espacios en blanco). El efecto se
+ *   reproduce durante la salida del hero (progress = scroll / vh).
  */
 export function DepthScene({
   children,
@@ -71,9 +74,12 @@ export function DepthScene({
   const layersRef = useRef<Set<DepthLayerHandle>>(new Set());
   const reduced = useReducedMotionSafe();
   const short = useShortViewport();
-  // En viewports bajos el pin no cabe: se replica el fallback de
-  // reduced-motion (layout estático, sin transforms ni fades) para que el
-  // contenido —incluidos los CTAs— siempre sea alcanzable por scroll.
+  const isMobile = useIsMobile();
+  // `pin` (desktop): sticky + recorrido extra. `exit` (móvil): escena de una
+  // pantalla; el efecto ocurre durante la salida. `isMobileViewport()`
+  // (síncrono) evita un primer setup con el modo equivocado al hidratar.
+  const exitMode = isMobile || isMobileViewport();
+  // En viewports bajos el pin no cabe: layout estático, sin motor.
   const enabled = !reduced && !short;
 
   // Refs estables: los callbacks no recrean el motor al re-renderizar.
@@ -98,9 +104,12 @@ export function DepthScene({
     let vh = window.innerHeight;
 
     const measure = () => {
-      start = wrapper.offsetTop;
-      distance = Math.max(1, wrapper.offsetHeight - window.innerHeight);
       vh = window.innerHeight;
+      start = wrapper.offsetTop;
+      // `exit`: recorrido = salida del hero (una pantalla). `pin`: sobrante.
+      distance = exitMode
+        ? Math.max(1, vh)
+        : Math.max(1, wrapper.offsetHeight - vh);
     };
 
     measure();
@@ -130,13 +139,23 @@ export function DepthScene({
             raw >= to ? 1 : raw <= from ? 0 : (raw - from) / (to - from);
         }
 
-        const yOffset = -progress * distance * speed + (config.offset ?? 0) * vh;
+        // `exit`: el stage ya asciende con el scroll; el término de profundidad
+        // (cercanos adelantan, lejanos se quedan) y `lag` (el plano se rezaga,
+        // moviéndose hacia abajo) dan el movimiento relativo. `pin`: recorrido
+        // clásico + offset.
+        const yOffset = exitMode
+          ? progress * distance * ((config.lag ?? 0) - (depth - 0.5) * 0.4)
+          : -progress * distance * speed + (config.offset ?? 0) * vh;
         const xOffset = px * amplitude * pointerFactor;
         const yPointer = py * amplitude * pointerFactor * 0.45;
+        // Recede/crece gradual: en móvil el contenido se encoge (shrink < 1)
+        // al salir, a la par que el ASCII se desarma.
+        const scale = 1 - (1 - (config.shrink ?? 1)) * progress;
 
         gsap.set(el, {
           x: xOffset,
           y: yOffset + yPointer,
+          scale,
           rotationX: config.rotate ? depthRotation(depth, progress) : 0,
           opacity,
           force3D: true,
@@ -183,7 +202,8 @@ export function DepthScene({
       smooth.x = target.x;
       smooth.y = target.y;
       const raw = pinnedRaw(window.scrollY, start, distance);
-      apply(Math.min(1, Math.max(0, raw)), raw, smooth.x, smooth.y);
+      const progress = Math.min(1, Math.max(0, raw));
+      apply(progress, exitMode ? progress : raw, smooth.x, smooth.y);
     };
 
     const tick = () => {
@@ -191,11 +211,10 @@ export function DepthScene({
       smooth.x = lerp(smooth.x, target.x, 0.055);
       smooth.y = lerp(smooth.y, target.y, 0.055);
 
-      // Raw: sin clamps, llega hasta (altura - vh) / distancia al final del
-      // despine (con length 2.4 ≈ 1.71). Los transforms usan el clamped.
+      // Pin: `raw` sin clamps llega durante el despine. Exit: fades en 0..1.
       const raw = pinnedRaw(window.scrollY, start, distance);
       const progress = Math.min(1, Math.max(0, raw));
-      apply(progress, raw, smooth.x, smooth.y);
+      apply(progress, exitMode ? progress : raw, smooth.x, smooth.y);
       frameRef.current?.({ progress, pointer: { x: smooth.x, y: smooth.y } });
     };
 
@@ -218,7 +237,7 @@ export function DepthScene({
         layer.el.style.willChange = "auto";
       }
     };
-  }, [enabled]);
+  }, [enabled, exitMode]);
 
   return (
     <RegistryContext.Provider value={{ register }}>
@@ -251,6 +270,12 @@ type DepthLayerProps = {
   baseOpacity?: number;
   /** Inclinación sutil de cámara (solo planos decorativos) */
   rotate?: boolean;
+  /** Escala objetivo a `progress = 1` (1 = sin cambio). El plano encoge/crece
+   *  de forma gradual con el recorrido. */
+  shrink?: number;
+  /** Solo en móvil (`exit`): el plano se rezaga (se mueve hacia abajo) para
+   *  permanecer en cuadro mientras se desvanece. */
+  lag?: number;
   className?: string;
 };
 
@@ -268,6 +293,8 @@ export function DepthLayer({
   fadeIn,
   baseOpacity,
   rotate,
+  shrink,
+  lag,
   className,
 }: DepthLayerProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -284,8 +311,10 @@ export function DepthLayer({
     fadeIn,
     baseOpacity,
     rotate,
+    shrink,
+    lag,
   });
-  configRef.current = { depth, speed, offset, pointer, fadeOut, fadeIn, baseOpacity, rotate };
+  configRef.current = { depth, speed, offset, pointer, fadeOut, fadeIn, baseOpacity, rotate, shrink, lag };
 
   useLayoutEffect(() => {
     const el = ref.current;

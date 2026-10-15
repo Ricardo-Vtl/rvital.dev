@@ -29,6 +29,13 @@ export interface DepthConfig {
   baseOpacity?: number;
   /** Inclinación sutil de cámara (solo planos decorativos) */
   rotate?: boolean;
+  /** Escala objetivo a `progress = 1` (1 = sin cambio). El plano encoge/crece
+   *  de forma gradual con el recorrido: recede hacia el fondo al salir. */
+  shrink?: number;
+  /** Solo en modo `exit` (móvil): desplazamiento hacia ABAJO proporcional al
+   *  progreso, en fracciones de viewport. El plano "se rezaga" y permanece en
+   *  cuadro más tiempo, para que su fade/encogimiento se note. */
+  lag?: number;
 }
 
 export interface ComputedDepth {
