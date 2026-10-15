@@ -16,7 +16,7 @@ export function About() {
       {/* Plano lejano (depth 0.05): se mueve poco y responde poco al puntero */}
       <Parallax speed={0.34} className="pointer-events-none absolute inset-0 select-none">
         <PointerDepth depth={0.08} className="h-full w-full">
-          <div className="absolute top-1/2 left-0 -translate-y-1/2 leading-none opacity-[0.06] md:left-8">
+          <div aria-hidden="true" className="absolute top-1/2 left-0 -translate-y-1/2 leading-none opacity-[0.06] md:left-8">
             <span className="block font-heading text-[30vw] font-bold tracking-tighter text-text-primary md:text-[20vw]">
               ABOUT
             </span>
@@ -92,6 +92,10 @@ export function About() {
               <PointerDepth depth={0.7} className="mt-5 border-y border-border py-5">
                 <VelocityMarquee items={personalInfo.skills} duration={34} size="sm" />
               </PointerDepth>
+
+              <p className="mt-5 font-mono text-[10px] font-medium uppercase tracking-[0.25em] text-text-tertiary">
+                {t("about.languages")}
+              </p>
             </Reveal>
           </Parallax>
         </div>

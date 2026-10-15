@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import Image from "next/image";
 import { ExternalLink, GitBranch, ArrowUpRight } from "lucide-react";
 import { useLang } from "./providers";
 import { projects, tData } from "@/data/portfolio";
@@ -8,9 +9,111 @@ import { SplitReveal } from "./motion/split-text";
 import { Parallax } from "./motion/parallax";
 import { PointerDepth } from "./depth/pointer-depth";
 import { gsap } from "@/lib/gsap";
-import { isMobileViewport, useIsMobile, useReducedMotionSafe } from "@/lib/motion";
+import {
+  isMobileViewport,
+  prefersReducedMotion,
+  useIsMobile,
+  useReducedMotionSafe,
+} from "@/lib/motion";
 
-function ProjectVisual({ color, index }: { color: string; index: number }) {
+const SHOT_HOLD = 4;
+const SHOT_FADE = 1.4;
+
+function ProjectVisual({
+  color,
+  index,
+  shots = [],
+  total,
+}: {
+  color: string;
+  index: number;
+  shots?: string[];
+  total: number;
+}) {
+  const shotsRef = useRef<HTMLDivElement>(null);
+  const hasShots = shots.length > 0;
+
+  // Crossfade lento entre las capturas reales (modo captura).
+  useLayoutEffect(() => {
+    const el = shotsRef.current;
+    if (!el || shots.length <= 1 || prefersReducedMotion()) return;
+
+    const imgs = gsap.utils.toArray<HTMLElement>("img", el);
+    if (imgs.length <= 1) return;
+
+    const ctx = gsap.context(() => {
+      gsap.set(imgs, { autoAlpha: 0 });
+      gsap.set(imgs[0], { autoAlpha: 1 });
+
+      const tl = gsap.timeline({
+        repeat: -1,
+        defaults: { duration: SHOT_FADE, ease: "power2.inOut" },
+      });
+      imgs.forEach((img, i) => {
+        const next = imgs[(i + 1) % imgs.length];
+        tl.to(next, { autoAlpha: 1 }, `+=${SHOT_HOLD}`).to(img, { autoAlpha: 0 }, "<");
+      });
+    }, el);
+
+    return () => ctx.revert();
+  }, [shots]);
+
+  const indexLabel = (
+    <PointerDepth depth={0.95} className="absolute top-4 right-5 z-20">
+      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-text-primary">
+        {`${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`}
+      </span>
+    </PointerDepth>
+  );
+
+  // ─── Modo captura: imágenes reales a plena vista, nítidas ───
+  if (hasShots) {
+    return (
+      <div className="relative h-full w-full overflow-hidden bg-surface">
+        <div ref={shotsRef} className="absolute inset-0">
+          {shots.map((src, i) => (
+            <Image
+              key={src}
+              src={src}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 92vw, 40vw"
+              className="object-cover object-top motion-safe:transition-transform motion-safe:duration-[1200ms] motion-safe:ease-out motion-safe:group-hover/visual:scale-[1.03]"
+              style={{ opacity: i === 0 ? 1 : 0 }}
+            />
+          ))}
+        </div>
+
+        {/* Scrims cortos: solo para asentar las etiquetas mono */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-bg/60 to-transparent"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-bg/85 to-transparent"
+        />
+
+        {/* Marcas de encuadre: mismo lenguaje que el retrato de About */}
+        {[
+          "top-2 left-2 border-t border-l",
+          "top-2 right-2 border-t border-r",
+          "bottom-2 left-2 border-b border-l",
+          "bottom-2 right-2 border-b border-r",
+        ].map((pos) => (
+          <span
+            key={pos}
+            aria-hidden="true"
+            className={`pointer-events-none absolute z-20 h-4 w-4 border-accent/80 ${pos}`}
+          />
+        ))}
+
+        {indexLabel}
+      </div>
+    );
+  }
+
+  // ─── Modo abstracto: proyectos sin material (glow + rejilla + número) ───
   return (
     <div className="relative h-full w-full overflow-hidden">
       {/* Plano lejano: glow atmosférico (se mueve menos) */}
@@ -56,12 +159,7 @@ function ProjectVisual({ color, index }: { color: string; index: number }) {
         </span>
       </Parallax>
 
-      {/* Plano más cercano: índice reactivo al puntero */}
-      <PointerDepth depth={0.95} className="absolute top-4 right-5">
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-text-secondary">
-          {`${String(index + 1).padStart(2, "0")} / ${String(2).padStart(2, "0")}`}
-        </span>
-      </PointerDepth>
+      {indexLabel}
     </div>
   );
 }
@@ -231,11 +329,18 @@ export function Projects() {
                 </div>
 
                 {/* Visual */}
-                <div className="md:col-span-5">
+                <div className="group/visual beam-border md:col-span-5">
                   <div className="relative aspect-4/5 w-full overflow-hidden border border-border-light md:aspect-3/4">
-                    <ProjectVisual color={project.color} index={i} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-bg/70 via-transparent to-transparent" />
-                    <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.3em] text-text-secondary">
+                    <ProjectVisual
+                      color={project.color}
+                      index={i}
+                      shots={project.shots}
+                      total={projects.length}
+                    />
+                    {!project.shots?.length && (
+                      <div className="absolute inset-0 bg-gradient-to-t from-bg/70 via-transparent to-transparent" />
+                    )}
+                    <span className="absolute bottom-4 left-4 z-20 font-mono text-[10px] uppercase tracking-[0.3em] text-text-secondary">
                       {project.tags[0]}
                     </span>
                   </div>

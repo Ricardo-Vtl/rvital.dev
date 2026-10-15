@@ -3,25 +3,28 @@ import { type Lang } from "@/lib/i18n";
 export const personalInfo = {
   name: "Ricardo Vital",
   initials: "RV",
-  title: { en: "Full-Stack Developer", es: "Desarrollador Full-Stack" },
+  title: { en: "Full-Stack Web Developer", es: "Desarrollador Web Full-Stack" },
   tagline: {
-    en: "Self-taught, adaptable, building the next level with modern technology.",
-    es: "Autodidacta, adaptable, construyendo el siguiente nivel con tecnología moderna.",
+    en: "I build complete web applications — from idea to deployment.",
+    es: "Construyo aplicaciones web completas — de la idea al despliegue.",
   },
   email: "vitalnegretericardo@gmail.com",
-  location: { en: "Irapuato, Guanajuato, MX — Remote", es: "Irapuato, Guanajuato, MX — Remoto" },
+  location: {
+    en: "Irapuato, GTO · MX — Remote / On-site",
+    es: "Irapuato, GTO · MX — Remoto / Presencial",
+  },
   social: {
     github: "https://github.com/Ricardo-Vtl",
     linkedin: "https://www.linkedin.com/in/ricardo-vital-dev",
   },
   bio: {
     en: [
-      "I studied Computer Systems Engineering at the Instituto Tecnológico Superior de Irapuato (TecNM) until my 10th semester, where I decided to forge my own path. Since then, I've built my education independently, focused on full-stack web development with modern technologies.",
-      "I'm passionate about adopting new tools — not for the sake of trend, but because they represent real leaps in performance, maintainability, and developer experience. I believe well-integrated AI — agents, skills, specialized documentation — is the next efficiency frontier for small teams and ambitious projects.",
+      "I'm a full-stack web developer from Irapuato, building complete web applications since August 2024 — from idea to deployment. I trained in Computer Systems Engineering at the Instituto Tecnológico Superior de Irapuato (TecNM) for 10 semesters and as a Mechatronics Technician; since then I've built my education independently, focused on modern full-stack web development.",
+      "I'm passionate about adopting new tools — not for the sake of trend, but because they represent real leaps in performance, maintainability, and developer experience. I'd rather have solid engineering underneath than something that only looks good — software should stay reliable as it grows.",
     ],
     es: [
-      "Cursé Ingeniería en Sistemas Computacionales en el Instituto Tecnológico Superior de Irapuato (TecNM) hasta 10mo semestre, donde decidí trazar mi propio camino. Desde entonces he construido mi formación de forma autónoma, enfocado en desarrollo web full-stack con tecnologías modernas.",
-      "Me apasiona adoptar herramientas nuevas no por moda, sino porque representan saltos reales en rendimiento, mantenibilidad y experiencia de desarrollo. Creo que la IA bien integrada —agentes, skills, documentación especializada— es el siguiente escalón en eficiencia para equipos pequeños y proyectos ambiciosos.",
+      "Soy desarrollador web full-stack de Irapuato, construyendo aplicaciones web completas desde agosto de 2024 — de la idea al despliegue. Me formé en Ingeniería en Sistemas Computacionales en el Instituto Tecnológico Superior de Irapuato (TecNM) durante 10 semestres y como Técnico en Mecatrónica; desde entonces he construido mi formación de forma autónoma, enfocado en desarrollo web full-stack moderno.",
+      "Me apasiona adoptar herramientas nuevas no por moda, sino porque representan saltos reales en rendimiento, mantenibilidad y experiencia de desarrollo. Prefiero una ingeniería sólida por debajo antes que algo que solo se vea bien — el software debe seguir siendo confiable a medida que crece.",
     ],
   },
   skills: [
@@ -31,14 +34,22 @@ export const personalInfo = {
     "Next.js",
     "Node.js",
     "Python",
+    "HTML5",
+    "CSS3",
     "Tailwind CSS",
+    "shadcn/ui",
+    "TanStack Query",
+    "Zod",
+    "Framer Motion",
     "PostgreSQL",
     "MySQL",
+    "SQL Server",
     "C#",
     "API REST",
     "Upstash Redis",
     "Supabase",
     "Vercel",
+    "Vitest",
     "Git / GitHub",
     "pnpm",
     "Zustand",
@@ -52,19 +63,37 @@ interface Project {
   liveUrl?: string;
   repoUrl?: string;
   color: string;
+  /** Capturas reales del producto, usadas como fondo del panel (opcional). */
+  shots?: string[];
 }
 
 export const projects: Project[] = [
   {
-    title: { en: "POS Web — Point of Sale Platform", es: "POS Web — Plataforma de Punto de Venta" },
-    description: {
-      en: "White-label POS and management platform, built and deployed end to end: public storefront with digital menu and cart, and a 9-module admin panel — Dashboard, Tables, Orders, Kitchen (KDS), Cashier, Menu, Logistics, Staff, and Settings. REST APIs, row-level security, rate limiting, automated tests, and technical documentation.",
-      es: "Plataforma POS y de gestión white-label, construida y desplegada de punta a punta: storefront público con menú digital y carrito, y panel administrativo de 9 módulos — Dashboard, Mesas, Pedidos, Cocina (KDS), Caja, Menú, Logística, Personal y Configuración. APIs REST, seguridad a nivel de fila, rate limiting, pruebas automatizadas y documentación técnica.",
+    title: {
+      en: "RMS — Restaurant Management System",
+      es: "RMS — Sistema de Gestión para Restaurantes",
     },
-    tags: ["Next.js", "TypeScript", "Supabase", "Tailwind CSS", "Upstash Redis", "Zustand"],
-    liveUrl: undefined,
-    repoUrl: undefined,
+    description: {
+      en: "Restaurant management platform, architected and shipped end to end: a public landing with a live digital menu and online ordering, plus a 9-module panel — Dashboard, Tables, Orders, Kitchen (KDS), Cashier, Menu, Inventory, Staff and Settings. White-label identity per deployment over a clean Next.js + Supabase architecture: API-only writes with atomic PostgreSQL RPCs, row-level security, Zod validation at every boundary, real-time sync and a Vitest suite.",
+      es: "Plataforma de gestión para restaurantes, arquitectada y llevada de punta a punta: landing pública con menú digital en vivo y pedidos en línea, más un panel de 9 módulos — Dashboard, Mesas, Pedidos, Cocina (KDS), Caja, Menú, Inventario, Personal y Configuración. Identidad white-label por despliegue sobre una arquitectura limpia de Next.js + Supabase: escrituras solo por API con RPC atómicas en PostgreSQL, seguridad a nivel de fila, validación Zod en cada frontera, sincronización en tiempo real y suite de pruebas con Vitest.",
+    },
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Supabase",
+      "TanStack Query",
+      "Zod",
+      "shadcn/ui",
+      "Tailwind CSS",
+      "Upstash Redis",
+    ],
+    liveUrl: "https://rms.rvital.dev",
+    repoUrl: "https://github.com/Ricardo-Vtl/restaurant-manager",
     color: "#ff6b35",
+    shots: [
+      "/projects/rms/01-landing-dashboard.webp",
+      "/projects/rms/02-menu-pedidos.webp",
+    ],
   },
   {
     title: { en: "MyOrbit (planning)", es: "MyOrbit (en planeación)" },
@@ -81,30 +110,30 @@ export const projects: Project[] = [
 
 export const experience = [
   {
-    role: { en: "Full-Stack Developer — Own Project", es: "Desarrollador Full-Stack — Proyecto propio" },
-    company: { en: "POS Web Platform", es: "Plataforma POS Web" },
-    period: "2025 — Present",
+    role: { en: "Full-Stack Web Developer — Independent", es: "Desarrollador Web Full-Stack — Independiente" },
+    company: { en: "Self-employed", es: "Independiente" },
+    period: "2024 — Present",
     description: {
-      en: "Full architecture and development of a POS and management web platform. Public storefront, PIN-based auth, 9-module admin panel, shopping cart, real-time sync with Supabase, and rate limiting with Upstash Redis.",
-      es: "Arquitectura y desarrollo completo de una plataforma web POS y de gestión. Storefront público, autenticación por PIN, panel administrativo de 9 módulos, carrito de compras, sincronización en tiempo real con Supabase y rate limiting con Upstash Redis.",
+      en: "Started in August 2024 with a basic academic website (HTML, CSS, JavaScript) and moved into full-stack development in early 2025: I architected and shipped RMS, a white-label restaurant management platform — public landing with online ordering, PIN auth, a 9-module panel, atomic PostgreSQL RPCs, real-time sync and rate limiting.",
+      es: "Comencé en agosto de 2024 con una web académica básica (HTML, CSS, JavaScript) y entré de lleno al desarrollo full-stack a inicios de 2025: arquitecté y desplegué RMS, una plataforma white-label de gestión para restaurantes — landing pública con pedidos en línea, autenticación por PIN, panel de 9 módulos, RPC atómicas en PostgreSQL, sincronización en tiempo real y rate limiting.",
     },
   },
   {
-    role: { en: "Self-Taught Developer", es: "Formación autodidacta" },
-    company: { en: "Full-Stack Web Development", es: "Desarrollo Web Full-Stack" },
-    period: "2023 — Present",
+    role: { en: "Computer Hardware Repair & Maintenance — Independent", es: "Mantenimiento y reparación de equipo de cómputo — Independiente" },
+    company: { en: "Self-employed", es: "Independiente" },
+    period: "2020 — Present",
     description: {
-      en: "Continuous study and hands-on application of React, Next.js, TypeScript, Node.js, databases, Vercel/Supabase deployment, and AI integration with agents and skills to accelerate development.",
-      es: "Estudio continuo y aplicación práctica de React, Next.js, TypeScript, Node.js, bases de datos, despliegue en Vercel/Supabase, e integración de IA con agentes y skills para acelerar el desarrollo.",
+      en: "Diagnose, maintain and repair desktops, laptops, all-in-ones and smartphones: component replacement, boot failures, overheating, OS installs and data recovery.",
+      es: "Diagnóstico, mantenimiento y reparación de PCs de torre, laptops, All-in-One y smartphones: reemplazo de componentes, fallas de arranque, sobrecalentamiento, instalación de sistemas operativos y recuperación de datos.",
     },
   },
   {
     role: { en: "Computer Systems Engineering", es: "Ingeniería en Sistemas Computacionales" },
     company: { en: "Instituto Tecnológico Superior de Irapuato (TecNM)", es: "Instituto Tecnológico Superior de Irapuato (TecNM)" },
-    period: "2021 — 2026",
+    period: "2021 — 2026 (Feb)",
     description: {
-      en: "Studied up to the 10th semester. Left the traditional path to focus on independent development and personal projects.",
-      es: "Cursé hasta 10.º semestre. Decidí abandonar el camino tradicional para enfocarme en desarrollo autónomo y proyectos propios.",
+      en: "Studied up to the 10th semester; paused since February 2026 to focus on independent development and personal projects.",
+      es: "Cursé estudios hasta el 10.º semestre; en pausa desde febrero de 2026 para centrarme en el desarrollo independiente y en proyectos personales.",
     },
   },
   {
@@ -112,8 +141,8 @@ export const experience = [
     company: { en: "CECyTEG", es: "CECyTEG" },
     period: "2016 — 2019",
     description: {
-      en: "Completed studies with certificate and degree (issued; pending pick-up at the institution). Thesis: a robotic arm built from household parts with Arduino — first hands-on experience combining hardware and code.",
-      es: "Estudios concluidos con certificado y título emitidos (pendientes de recoger en la institución). Tesis: brazo robótico construido con piezas caseras y Arduino — primera experiencia práctica combinando hardware y código.",
+      en: "Completed studies with certificate and degree. Thesis: a robotic arm built from household parts with Arduino — first hands-on experience combining hardware and code.",
+      es: "Estudios concluidos con certificado y título emitidos. Tesis: brazo robótico construido con piezas caseras y Arduino — primera experiencia práctica combinando hardware y código.",
     },
   },
 ];
