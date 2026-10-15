@@ -24,7 +24,7 @@ export function Experience() {
     <section id="experience" className="relative overflow-hidden px-6 py-28 md:py-40">
       {/* Watermark con parallax */}
       <Parallax speed={0.13} className="pointer-events-none absolute inset-0 select-none">
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 leading-none opacity-[0.07]">
+        <div aria-hidden="true" className="absolute top-1/2 left-0 -translate-y-1/2 leading-none opacity-[0.07]">
           <span className="block font-heading text-[22vw] font-bold leading-none tracking-tighter text-text-primary md:text-[20vw]">
             PATH
           </span>
@@ -59,7 +59,7 @@ export function Experience() {
                     {/* Dot */}
                     <div className="absolute top-1.5 left-0">
                       <div className="flex h-5 w-5 items-center justify-center">
-                        <div className="h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_14px_-2px_var(--color-accent-glow)]" />
+                        <div className="h-2.5 w-2.5 bg-accent shadow-[0_0_14px_-2px_var(--color-accent-glow)]" />
                       </div>
                     </div>
 

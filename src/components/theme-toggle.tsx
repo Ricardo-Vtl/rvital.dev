@@ -13,7 +13,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="group flex h-11 w-11 items-center justify-center rounded-full border border-border text-text-tertiary transition-colors hover:border-border-light hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:h-8 md:w-8"
+      className="group flex h-11 w-11 items-center justify-center border border-border text-text-tertiary transition-colors hover:border-border-light hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:h-8 md:w-8"
       aria-label={theme === "dark" ? t("theme.light") : t("theme.dark")}
     >
       <m.div

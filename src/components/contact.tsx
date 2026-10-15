@@ -25,7 +25,7 @@ export function Contact() {
       {/* Plano lejano (depth 0.12): watermark que apenas se mueve */}
       <Parallax speed={0.3} className="pointer-events-none absolute inset-0 select-none">
         <PointerDepth depth={0.12} className="h-full w-full">
-          <div className="absolute top-1/2 right-0 -translate-y-1/2 leading-none opacity-[0.055]">
+          <div aria-hidden="true" className="absolute top-1/2 right-0 -translate-y-1/2 leading-none opacity-[0.055]">
             <span className="block font-heading text-[30vw] font-bold tracking-tighter text-text-primary md:text-[20vw]">
               TALK
             </span>

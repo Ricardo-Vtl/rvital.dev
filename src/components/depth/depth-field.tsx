@@ -25,8 +25,8 @@ type DepthFieldProps = {
 
 /* Paletas: se leen del tema activo (clase .light en <html>). */
 const PALETTE = {
-  dark: { a: [1.0, 0.42, 0.2], b: [0.36, 0.5, 0.48], opacity: 1.0 },
-  light: { a: [0.72, 0.24, 0.05], b: [0.25, 0.35, 0.33], opacity: 0.7 },
+  dark: { a: [1.0, 0.42, 0.2], b: [0.36, 0.5, 0.48], opacity: 0.9 },
+  light: { a: [0.72, 0.24, 0.05], b: [0.25, 0.35, 0.33], opacity: 0.35 },
 } as const;
 
 const vertex = /* glsl */ `
@@ -61,11 +61,11 @@ const vertex = /* glsl */ `
     p.y += uPointer.y * 1.2 * speed;
     p.y += sin(uTime * 0.35 + aSeed * 6.2831) * 0.45 * speed;
 
-    float scale = mix(1.0, 0.2, far);
+    float scale = mix(0.85, 0.18, far);
     vec4 world = vec4(p + vec3(position * (aSize * scale), 0.0), 1.0);
     gl_Position = projectionMatrix * modelViewMatrix * world;
 
-    vAlpha = mix(0.42, 0.05, far);
+    vAlpha = mix(0.26, 0.04, far);
   }
 `;
 
@@ -170,9 +170,9 @@ export const DepthField = forwardRef<DepthFieldHandle, DepthFieldProps>(
         const home: [number, number, number] = [
           (Math.random() - 0.5) * (18 + far * 12),
           (Math.random() - 0.5) * (11 + far * 7),
-          -2 - far * 34,
+          -6 - far * 38,
         ];
-        const size = (0.22 + Math.random() * 0.85) * (1 - far * 0.7);
+        const size = (0.16 + Math.random() * 0.6) * (1 - far * 0.7);
         const seed = Math.random();
 
         for (let c = 0; c < 6; c++) {

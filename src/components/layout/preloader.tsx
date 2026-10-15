@@ -87,7 +87,7 @@ export function Preloader() {
             Ricardo Vital
           </p>
           <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-text-tertiary">
-            Full-Stack Developer
+            Full-Stack Web Developer
           </p>
         </div>
         <span

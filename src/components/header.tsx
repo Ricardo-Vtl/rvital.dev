@@ -61,7 +61,7 @@ export function Header() {
           ))}
           <button
             onClick={toggleLang}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-text-tertiary transition-colors hover:border-border-light hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:h-8 md:w-8"
+            className="flex h-11 w-11 items-center justify-center border border-border text-text-tertiary transition-colors hover:border-border-light hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:h-8 md:w-8"
             aria-label={t("lang.switch")}
           >
             <Languages className="h-3.5 w-3.5" />
@@ -72,7 +72,7 @@ export function Header() {
         <div className="flex items-center gap-2 md:hidden">
           <button
             onClick={toggleLang}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-text-tertiary transition-colors hover:border-border-light hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="flex h-11 w-11 items-center justify-center border border-border text-text-tertiary transition-colors hover:border-border-light hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             aria-label={t("lang.switch")}
           >
             <Languages className="h-4 w-4" />
@@ -80,8 +80,8 @@ export function Header() {
           <ThemeToggle />
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-border transition-colors hover:border-border-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            className="flex h-11 w-11 items-center justify-center border border-border transition-colors hover:border-border-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label={menuOpen ? t("menu.close") : t("menu.open")}
           >
             {menuOpen ? (
               <X className="h-4 w-4 text-text-secondary" />

@@ -68,7 +68,7 @@ export function KineticBand({ label }: KineticBandProps) {
         </span>
       ) : null}
 
-      <div className="flex flex-col gap-4 md:gap-6">
+      <div aria-hidden="true" className="flex flex-col gap-4 md:gap-6">
         {ROWS.map((row, rowIndex) => (
           <div key={rowIndex} className="overflow-clip">
             <div

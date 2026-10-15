@@ -68,11 +68,19 @@ export function Workflow() {
                         </div>
                       </div>
 
-                      {/* Número del paso: capa parallax sutil */}
-                      <Parallax speed={0.06} className="pointer-events-none absolute -top-6 -left-2 -z-10">
-                        <span className="font-heading text-7xl font-bold tracking-tighter text-text-primary/[0.04] md:text-8xl">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
+                      {/* Número del paso: capa parallax sutil, a la izquierda de la línea */}
+                      <Parallax
+                        speed={0.06}
+                        className="pointer-events-none absolute -top-6 -left-14 -z-10 hidden md:-left-20 md:block"
+                      >
+                        <div className="-translate-x-full">
+                          <span
+                            aria-hidden="true"
+                            className="font-heading text-7xl font-bold tracking-tighter text-text-primary/[0.04] md:text-8xl"
+                          >
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                        </div>
                       </Parallax>
 
                       <span className="inline-block border border-border bg-surface px-2.5 py-1 font-mono text-[11px] text-accent">
