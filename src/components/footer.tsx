@@ -41,15 +41,14 @@ export function Footer() {
             {/* Center - Social */}
             <div className="flex items-center gap-4">
               {[
-                { icon: Github, href: personalInfo.social.github, label: "GitHub" },
-                { icon: Linkedin, href: personalInfo.social.linkedin, label: "LinkedIn" },
-                { icon: Mail, href: `mailto:${personalInfo.email}`, label: "Email" },
-              ].map(({ icon: Icon, href, label }) => (
+                { icon: Github, href: personalInfo.social.github, label: "GitHub", external: true },
+                { icon: Linkedin, href: personalInfo.social.linkedin, label: "LinkedIn", external: true },
+                { icon: Mail, href: `mailto:${personalInfo.email}`, label: "Email", external: false },
+              ].map(({ icon: Icon, href, label, external }) => (
                 <a
                   key={label}
                   href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   data-cursor="link"
                   className="flex h-11 w-11 items-center justify-center border border-border text-text-tertiary transition-all hover:border-border-light hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent md:h-9 md:w-9"
                   aria-label={label}

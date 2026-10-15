@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowUpRight, Copy, Check } from "lucide-react";
 import { useLang } from "./providers";
 import { personalInfo, tData } from "@/data/portfolio";
 import { Reveal } from "./motion";
@@ -12,9 +12,39 @@ import { Magnetic } from "./motion/magnetic";
 
 export function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [copied, setCopied] = useState(false);
   const { t, lang } = useLang();
 
   const heading = lang === "es" ? "Construyamos algo" : "Let's build";
+
+  // Copiar al portapapeles: funciona aunque el visitante no tenga un cliente
+  // de correo configurado (el caso en que `mailto:` no hace nada). Fallback
+  // con textarea temporal para contextos sin `navigator.clipboard` (http).
+  const copyEmail = async () => {
+    const done = () => {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    };
+    try {
+      await navigator.clipboard.writeText(personalInfo.email);
+      done();
+    } catch {
+      try {
+        const el = document.createElement("textarea");
+        el.value = personalInfo.email;
+        el.setAttribute("readonly", "");
+        el.style.position = "fixed";
+        el.style.left = "-9999px";
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        done();
+      } catch {
+        /* clipboard no disponible: se deja el mailto como respaldo */
+      }
+    }
+  };
 
   return (
     <section
@@ -78,6 +108,23 @@ export function Contact() {
                 </a>
               </Magnetic>
             </PointerDepth>
+
+            <div className="mt-5">
+              <button
+                type="button"
+                onClick={copyEmail}
+                className="inline-flex items-center gap-2 border border-border bg-surface px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-text-tertiary transition-colors hover:border-accent/40 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                {copied ? (
+                  <Check className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" aria-hidden="true" />
+                )}
+                <span aria-live="polite">
+                  {copied ? t("contact.copied") : t("contact.copy")}
+                </span>
+              </button>
+            </div>
           </div>
 
           <Reveal delay={0.25}>
