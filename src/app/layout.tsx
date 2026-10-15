@@ -30,19 +30,22 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Ricardo Vital — Full-Stack Developer",
+    default: "Ricardo Vital — Full-Stack Web Developer",
     template: "%s — Ricardo Vital",
   },
   description:
-    "Full-stack developer from Irapuato, Mexico. Complete web applications: APIs, databases, security, testing and deployment. Portfolio of Ricardo Vital.",
+    "Full-stack web developer from Irapuato, Mexico. I build complete web applications — from idea to deployment — with React, Next.js, TypeScript, Supabase and PostgreSQL. Portfolio of Ricardo Vital.",
   keywords: [
     "full-stack developer",
+    "full-stack web developer",
     "desarrollador web",
     "react",
     "next.js",
     "typescript",
     "node.js",
+    "supabase",
     "postgresql",
+    "tailwind css",
     "ricardo vital",
     "irapuato",
     "web developer",
@@ -57,16 +60,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_MX",
     siteName: "Ricardo Vital",
-    title: "Ricardo Vital — Full-Stack Developer",
+    title: "Ricardo Vital — Full-Stack Web Developer",
     description:
-      "Aplicaciones web completas: arquitectura, APIs, base de datos, seguridad, testing y despliegue. Portafolio de Ricardo Vital, Irapuato, México.",
+      "Desarrollador web full-stack de Irapuato, México. Construyo aplicaciones web completas — de la idea al despliegue — con React, Next.js, TypeScript, Supabase y PostgreSQL. Portafolio de Ricardo Vital.",
     url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ricardo Vital — Full-Stack Developer",
+    title: "Ricardo Vital — Full-Stack Web Developer",
     description:
-      "Aplicaciones web completas: arquitectura, APIs, base de datos, seguridad, testing y despliegue.",
+      "Desarrollador web full-stack de Irapuato, México. Construyo aplicaciones web completas — de la idea al despliegue — con React, Next.js, TypeScript, Supabase y PostgreSQL.",
   },
   robots: {
     index: true,
@@ -118,7 +121,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Ricardo Vital",
-              jobTitle: "Full-Stack Developer",
+              jobTitle: "Full-Stack Web Developer",
               url: siteUrl,
               sameAs: [
                 "https://github.com/Ricardo-Vtl",
@@ -131,7 +134,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-bg font-body text-text-primary antialiased">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70] focus:rounded-full focus:border focus:border-border-light focus:bg-surface focus:px-4 focus:py-4 focus:text-sm focus:font-medium focus:text-accent"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[70] focus:border focus:border-border-light focus:bg-surface focus:px-4 focus:py-4 focus:text-sm focus:font-medium focus:text-accent"
         >
           Skip to content
         </a>

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Ricardo Vital — Full-Stack Developer";
+export const alt = "Ricardo Vital — Full-Stack Web Developer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -28,7 +28,7 @@ export default function OgImage() {
         </div>
 
         <div style={{ display: "flex", fontSize: 34, color: "#ff6b35", marginTop: 24, letterSpacing: "0.25em", textTransform: "uppercase" }}>
-          Full-Stack Developer
+          Full-Stack Web Developer
         </div>
 
         <div style={{ display: "flex", fontSize: 26, color: "#a3a3a3", marginTop: 56 }}>
@@ -36,7 +36,7 @@ export default function OgImage() {
         </div>
 
         <div style={{ display: "flex", fontSize: 22, color: "#6b6b6b", marginTop: 16, letterSpacing: "0.15em", textTransform: "uppercase" }}>
-          Irapuato, Guanajuato, MX — Available remote
+          Irapuato, GTO · MX — Remote / On-site
         </div>
       </div>
     ),
