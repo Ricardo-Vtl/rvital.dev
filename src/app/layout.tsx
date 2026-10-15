@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Bricolage_Grotesque, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { Header } from "@/components/header";
@@ -146,6 +147,7 @@ export default function RootLayout({
           <Header />
           <main id="main-content">{children}</main>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
