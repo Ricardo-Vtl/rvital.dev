@@ -212,7 +212,7 @@ export function Hero() {
         fadeIn={[0.62, 0.76]}
         fadeOut={[1.05, 1.5]}
         pointer={0.09}
-        className="absolute inset-0 flex items-center justify-center px-6"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center px-6"
       >
         <p className="max-w-3xl text-center font-heading text-4xl leading-[1.05] font-bold tracking-tight text-text-primary md:text-6xl lg:text-7xl">
           {lang === "es" ? (
@@ -277,7 +277,7 @@ export function Hero() {
       </DepthLayer>
 
       {/* ─── Indicador de scroll: solo desktop (en móvil choca con la placa) ─── */}
-      <DepthLayer depth={0.85} speed={0.3} baseOpacity={1} fadeOut={[0, 0.06]} className="absolute inset-0 hidden md:block">
+      <DepthLayer depth={0.85} speed={0.3} baseOpacity={1} fadeOut={[0, 0.06]} className="pointer-events-none absolute inset-0 hidden md:block">
         <m.div
           initial={reducedMotion ? undefined : { opacity: 0 }}
           animate={reducedMotion ? undefined : { opacity: 1 }}
