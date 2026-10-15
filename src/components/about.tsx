@@ -6,7 +6,6 @@ import { personalInfo, tData } from "@/data/portfolio";
 import { Parallax } from "./motion/parallax";
 import { PointerDepth } from "./depth/pointer-depth";
 import { Reveal, RevealWords } from "./motion";
-import { VelocityMarquee } from "./motion/velocity-marquee";
 
 export function About() {
   const { t, lang } = useLang();
@@ -83,17 +82,12 @@ export function About() {
               </Reveal>
             </div>
 
-            {/* Plano cercano (depth 0.75): responde más al puntero */}
+            {/* Idiomas: bloque humano, separado del Stack técnico */}
             <Reveal delay={0.15} className="mt-14">
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.25em] text-text-tertiary">
-                {t("section.technologies")}
+                {t("about.languagesLabel")}
               </span>
-
-              <PointerDepth depth={0.7} className="mt-5 border-y border-border py-5">
-                <VelocityMarquee items={personalInfo.skills} duration={34} size="sm" />
-              </PointerDepth>
-
-              <p className="mt-5 font-mono text-[10px] font-medium uppercase tracking-[0.25em] text-text-tertiary">
+              <p className="mt-4 font-body text-base text-text-secondary md:text-lg">
                 {t("about.languages")}
               </p>
             </Reveal>

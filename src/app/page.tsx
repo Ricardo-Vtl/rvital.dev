@@ -1,9 +1,11 @@
 import { Hero } from "@/components/hero";
+import { Statement } from "@/components/statement";
 import { About } from "@/components/about";
+import { Experience } from "@/components/experience";
+import { Projects } from "@/components/projects";
+import { Stack } from "@/components/stack";
 import { KineticBand } from "@/components/kinetic-band";
 import { Workflow } from "@/components/workflow";
-import { Projects } from "@/components/projects";
-import { Experience } from "@/components/experience";
 import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
 import { projects } from "@/data/portfolio";
@@ -36,11 +38,13 @@ export default function Home() {
         }}
       />
       <Hero />
+      <Statement />
       <About />
+      <Experience />
+      <Projects />
+      <Stack />
       <KineticBand />
       <Workflow />
-      <Projects />
-      <Experience />
       <Contact />
       <Footer />
     </>

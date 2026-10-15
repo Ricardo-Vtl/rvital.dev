@@ -27,34 +27,48 @@ export const personalInfo = {
       "Me apasiona adoptar herramientas nuevas no por moda, sino porque representan saltos reales en rendimiento, mantenibilidad y experiencia de desarrollo. Prefiero una ingeniería sólida por debajo antes que algo que solo se vea bien — el software debe seguir siendo confiable a medida que crece.",
     ],
   },
-  skills: [
-    "React",
-    "TypeScript",
-    "JavaScript",
-    "Next.js",
-    "Node.js",
-    "Python",
-    "HTML5",
-    "CSS3",
-    "Tailwind CSS",
-    "shadcn/ui",
-    "TanStack Query",
-    "Zod",
-    "Framer Motion",
-    "PostgreSQL",
-    "MySQL",
-    "SQL Server",
-    "C#",
-    "API REST",
-    "Upstash Redis",
-    "Supabase",
-    "Vercel",
-    "Vitest",
-    "Git / GitHub",
-    "pnpm",
-    "Zustand",
-  ],
 };
+
+/**
+ * Tecnologías agrupadas por ambiente de uso. El orden de los grupos y de los
+ * ítems es intencional (lo más fuerte primero) y se renderiza tal cual en la
+ * sección Stack — edita aquí, no en el componente.
+ */
+export const skillGroups: { key: string; items: string[] }[] = [
+  {
+    key: "frontend",
+    items: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Framer Motion",
+      "TanStack Query",
+      "Zustand",
+      "Zod",
+    ],
+  },
+  {
+    key: "backend",
+    items: ["Node.js", "Python", "C#", "API REST"],
+  },
+  {
+    key: "databases",
+    items: ["PostgreSQL", "MySQL", "SQL Server", "Supabase", "Upstash Redis"],
+  },
+  {
+    key: "tools",
+    items: ["Git / GitHub", "pnpm", "Vercel", "Vitest"],
+  },
+  {
+    key: "mobile",
+    items: ["React Native"],
+  },
+];
 
 interface Project {
   title: { en: string; es: string };

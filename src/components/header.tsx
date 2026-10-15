@@ -11,9 +11,10 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { key: "nav.about", href: "#about" },
-  { key: "nav.workflow", href: "#workflow" },
-  { key: "nav.projects", href: "#projects" },
   { key: "nav.experience", href: "#experience" },
+  { key: "nav.projects", href: "#projects" },
+  { key: "section.stack", href: "#stack" },
+  { key: "nav.workflow", href: "#workflow" },
   { key: "nav.contact", href: "#contact" },
 ];
 
